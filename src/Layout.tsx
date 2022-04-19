@@ -33,9 +33,9 @@ class Layout extends React.Component<{}, S> {
 
   render() {
     return (
-      <Grid>
+      <Grid celled columns={3}>
         {this.state.layout.map((row, rowIdx) => (
-          <Grid.Row key={`Row-${rowIdx}`}>
+          <Grid.Row centered key={`Row-${rowIdx}`}>
             {row.map((cell, cellIdx) => (
               <Grid.Column key={`Cell-${rowIdx}-${cellIdx}`}>
                 {cell ? 1 + this.countNeighbour(rowIdx, cellIdx) : 0}
