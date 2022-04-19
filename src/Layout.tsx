@@ -14,6 +14,7 @@ const defaultLayout = [
   [false, true, false],
   [false, false, false],
 ];
+const baseOutput = 40;
 
 class Layout extends React.Component<{}, S> {
   constructor(props: {}) {
@@ -23,7 +24,17 @@ class Layout extends React.Component<{}, S> {
     };
   }
 
-  countNeighbour(rowIdx: number, cellIdx: number): number {
+  calculatePower(): number {
+    let accum = 0;
+    for (let i = 0; i < maxRow; i++) {
+      for (let j = 0; j < maxCol; j++) {
+        accum += this.getOutputMultiplier(i, j);
+      }
+    }
+    return accum * baseOutput;
+  }
+
+  getOutputMultiplier(rowIdx: number, cellIdx: number): number {
     const layout = this.state.layout;
     if (!layout[rowIdx][cellIdx]) {
       return 0;
@@ -56,7 +67,7 @@ class Layout extends React.Component<{}, S> {
   }
 
   renderCell(rowIdx: number, cellIdx: number) {
-    const count = this.countNeighbour(rowIdx, cellIdx);
+    const count = this.getOutputMultiplier(rowIdx, cellIdx);
     const inner =
       count === 0 ? (
         <div></div>
@@ -95,6 +106,8 @@ class Layout extends React.Component<{}, S> {
         ))}
         <Grid.Row centered>
           Click on an empty cell to place a nuclear power plant.
+          <br />
+          This layout produces {this.calculatePower()} MW output.
         </Grid.Row>
       </Grid>
     );
