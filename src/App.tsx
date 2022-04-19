@@ -1,25 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, Grid } from 'fomantic-ui-react';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Grid>
+        <Grid.Row centered>
+          <h1>Factorio Nuclear Power Plant Calculator</h1>
+        </Grid.Row>
+        <Grid.Row centered>
+          <Grid.Column>Layout</Grid.Column>
+          <Grid.Column>Analysis</Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
   );
 }
 
