@@ -6,10 +6,6 @@ type P = {
 };
 
 class Calculator extends React.Component<P> {
-  constructor(props: P) {
-    super(props);
-  }
-
   render() {
     const power = this.props.output;
     const heatExchanger = power / 10;

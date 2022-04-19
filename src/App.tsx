@@ -38,7 +38,6 @@ class App extends React.Component<{}, S> {
         },
       })
     );
-    this.state.layout[rowIdx][cellIdx] = !this.state.layout[rowIdx][cellIdx];
   }
 
   calculatePower(): number {

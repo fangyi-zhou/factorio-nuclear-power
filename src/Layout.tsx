@@ -10,13 +10,8 @@ type P = {
 
 const nuclearEmoji = '☢️';
 const maxCol = 3;
-const maxRow = 3;
 
 class Layout extends React.Component<P, {}> {
-  constructor(props: P) {
-    super(props);
-  }
-
   renderCell(rowIdx: number, cellIdx: number) {
     const count = this.props.getOutputMultiplier(rowIdx, cellIdx);
     const inner =
