@@ -9,10 +9,11 @@ type S = {
 };
 
 const maxCol = 3;
-const maxRow = 3;
+const maxRow = 4;
 const defaultLayout = [
   [false, false, false],
   [false, true, false],
+  [false, false, false],
   [false, false, false],
 ];
 const baseOutput = 40;
