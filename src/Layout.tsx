@@ -1,10 +1,11 @@
-import { Grid, Segment } from 'fomantic-ui-react';
+import { Button, Grid, Segment } from 'fomantic-ui-react';
 import React from 'react';
 
 type P = {
   layout: Array<Array<boolean>>;
   handleClick: (rowIdx: number, cellIdx: number) => void;
   getOutputMultiplier: (rowIdx: number, cellIdx: number) => number;
+  addRow: () => void;
 };
 
 const nuclearEmoji = '☢️';
@@ -50,7 +51,10 @@ class Layout extends React.Component<P, {}> {
           </Grid.Row>
         ))}
         <Grid.Row centered>
-          <p>Click on an empty cell to place a nuclear power plant.</p>
+          <div style={{ padding: '10px' }}>
+            <p>Click on an empty cell to place a nuclear power plant.</p>
+            <Button onClick={this.props.addRow}>Add a row</Button>
+          </div>
         </Grid.Row>
       </Grid>
     );

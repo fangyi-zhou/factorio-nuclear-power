@@ -9,7 +9,7 @@ type S = {
 };
 
 const maxCol = 3;
-const maxRow = 4;
+const emptyLine = [false, false, false];
 const defaultLayout = [
   [false, false, false],
   [false, true, false],
@@ -26,6 +26,7 @@ class App extends React.Component<{}, S> {
     };
   }
   handleClick(rowIdx: number, cellIdx: number) {
+    const maxRow = this.state.layout.length;
     if (rowIdx < 0 || rowIdx >= maxRow) return;
     if (cellIdx < 0 || cellIdx >= maxCol) return;
     this.setState(
@@ -42,6 +43,7 @@ class App extends React.Component<{}, S> {
   }
 
   calculatePower(): number {
+    const maxRow = this.state.layout.length;
     let accum = 0;
     for (let i = 0; i < maxRow; i++) {
       for (let j = 0; j < maxCol; j++) {
@@ -53,6 +55,7 @@ class App extends React.Component<{}, S> {
 
   getOutputMultiplier(rowIdx: number, cellIdx: number): number {
     const layout = this.state.layout;
+    const maxRow = layout.length;
     if (!layout[rowIdx][cellIdx]) {
       return 0;
     }
@@ -62,6 +65,16 @@ class App extends React.Component<{}, S> {
     if (cellIdx > 0 && layout[rowIdx][cellIdx - 1]) count++;
     if (cellIdx < maxCol - 1 && layout[rowIdx][cellIdx + 1]) count++;
     return count;
+  }
+
+  addRow() {
+    this.setState(
+      update(this.state, {
+        layout: {
+          $push: [emptyLine],
+        },
+      })
+    );
   }
 
   render() {
@@ -79,6 +92,7 @@ class App extends React.Component<{}, S> {
                 layout={this.state.layout}
                 handleClick={this.handleClick.bind(this)}
                 getOutputMultiplier={this.getOutputMultiplier.bind(this)}
+                addRow={this.addRow.bind(this)}
               ></Layout>
             </Grid.Column>
             <Grid.Column>
