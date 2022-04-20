@@ -77,7 +77,6 @@ class App extends React.Component<{}, S> {
                 layout={this.state.layout}
                 handleClick={this.handleClick.bind(this)}
                 getOutputMultiplier={this.getOutputMultiplier.bind(this)}
-                power={this.calculatePower()}
               ></Layout>
             </Grid.Column>
             <Grid.Column>

@@ -17,6 +17,7 @@ class Calculator extends React.Component<P> {
     const turbineRounded = Math.round(turbine * 100) / 100;
     return (
       <Container>
+        This layout produces {this.props.output} MW output.
         <br />
         <br />
         {power} MW of power output is consumed by {heatExchanger}{' '}

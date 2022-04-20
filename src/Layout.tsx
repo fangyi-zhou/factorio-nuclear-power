@@ -5,7 +5,6 @@ type P = {
   layout: Array<Array<boolean>>;
   handleClick: (rowIdx: number, cellIdx: number) => void;
   getOutputMultiplier: (rowIdx: number, cellIdx: number) => number;
-  power: number;
 };
 
 const nuclearEmoji = '☢️';
@@ -52,8 +51,6 @@ class Layout extends React.Component<P, {}> {
         ))}
         <Grid.Row centered>
           Click on an empty cell to place a nuclear power plant.
-          <br />
-          This layout produces {this.props.power} MW output.
         </Grid.Row>
       </Grid>
     );
