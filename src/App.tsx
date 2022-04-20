@@ -66,7 +66,7 @@ class App extends React.Component<{}, S> {
   render() {
     return (
       <Container>
-        <Grid columns={2} divided>
+        <Grid columns={2} divided className="stackable">
           <Grid.Row centered>
             <h1>Factorio Nuclear Power Plant Calculator</h1>
           </Grid.Row>
