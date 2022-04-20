@@ -1,4 +1,4 @@
-import { Container, Segment } from 'fomantic-ui-react';
+import { Container } from 'fomantic-ui-react';
 import React from 'react';
 
 type P = {
