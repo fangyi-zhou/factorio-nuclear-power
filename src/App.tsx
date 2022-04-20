@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Grid } from 'fomantic-ui-react';
+import { Container, Divider, Grid } from 'fomantic-ui-react';
 import update from 'immutability-helper';
 import Layout from './Layout';
 import Calculator from './Calculator';
@@ -69,7 +69,9 @@ class App extends React.Component<{}, S> {
       <Container>
         <Grid columns={2} divided className="stackable">
           <Grid.Row centered>
-            <h1>Factorio Nuclear Power Plant Calculator</h1>
+            <div style={{ padding: '15px' }}>
+              <h1>Factorio Nuclear Power Plant Calculator</h1>
+            </div>
           </Grid.Row>
           <Grid.Row centered>
             <Grid.Column>
@@ -84,6 +86,23 @@ class App extends React.Component<{}, S> {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <br />
+        <Divider />
+        <div style={{ textAlign: 'center' }}>
+          <p>
+            This calculator is &nbsp;
+            <a href="https://github.com/fangyi-zhou/factorio-nuclear-power/">
+              open source
+            </a>
+            .
+          </p>
+          <p>
+            See also: &nbsp;
+            <a href="https://alt-f4.blog/ALTF4-57/">
+              Alt-F4 #57 - Nuclear Energy and You
+            </a>
+          </p>
+        </div>
       </Container>
     );
   }

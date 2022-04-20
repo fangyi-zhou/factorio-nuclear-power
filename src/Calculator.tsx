@@ -1,4 +1,4 @@
-import { Container } from 'fomantic-ui-react';
+import { Container, Segment } from 'fomantic-ui-react';
 import React from 'react';
 
 type P = {
@@ -16,26 +16,37 @@ class Calculator extends React.Component<P> {
     const turbine = steam / 60;
     const turbineRounded = Math.round(turbine * 100) / 100;
     return (
-      <Container>
-        This layout produces {this.props.output} MW output.
-        <br />
-        <br />
-        {power} MW of power output is consumed by {heatExchanger}{' '}
-        <i>Heat Exchangers</i> (10MW per <i>Heat Exchanger</i>).
-        <br />
-        <br />
-        {heatExchanger} <i>Heat Exchangers</i> boil {steamRounded} <i>Water</i>{' '}
-        to <i>Steam</i> per second (103.09 per <i>Heat Exchanger</i>).
-        <br />
-        <br />
-        {steamRounded} <i>Water</i> requires {Math.ceil(offshorePump)} (
-        {offshorePumpRounded}) <i>Offshore Pumps</i> (1200 per{' '}
-        <i>Offshore Pump</i>).
-        <br />
-        <br />
-        {steamRounded} <i>Steam</i> is consumed by {Math.ceil(turbine)} (
-        {turbineRounded}) <i>Steam Turbines</i> (60 per <i>Steam Turbine</i>).
-      </Container>
+      <div
+        style={{
+          justifyContent: 'space-around',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
+      >
+        <Container text>
+          <p>This layout produces {this.props.output} MW output.</p>
+          <p>
+            {power} MW of power output is consumed by {heatExchanger}{' '}
+            <i>Heat Exchangers</i> (10MW per <i>Heat Exchanger</i>).
+          </p>
+          <p>
+            {heatExchanger} <i>Heat Exchangers</i> boil {steamRounded}{' '}
+            <i>Water</i> to <i>Steam</i> per second (103.09 per{' '}
+            <i>Heat Exchanger</i>).
+          </p>
+          <p>
+            {steamRounded} <i>Water</i> requires {Math.ceil(offshorePump)} (
+            {offshorePumpRounded}) <i>Offshore Pumps</i> (1200 per{' '}
+            <i>Offshore Pump</i>).
+          </p>
+          <p>
+            {steamRounded} <i>Steam</i> is consumed by {Math.ceil(turbine)} (
+            {turbineRounded}) <i>Steam Turbines</i> (60 per <i>Steam Turbine</i>
+            ).
+          </p>
+        </Container>
+      </div>
     );
   }
 }

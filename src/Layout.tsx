@@ -50,7 +50,7 @@ class Layout extends React.Component<P, {}> {
           </Grid.Row>
         ))}
         <Grid.Row centered>
-          Click on an empty cell to place a nuclear power plant.
+          <p>Click on an empty cell to place a nuclear power plant.</p>
         </Grid.Row>
       </Grid>
     );
