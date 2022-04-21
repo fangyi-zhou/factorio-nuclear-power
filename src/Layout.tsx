@@ -1,4 +1,4 @@
-import { Button, Grid, Segment } from 'fomantic-ui-react';
+import { Button, Grid, Segment, Popup } from 'fomantic-ui-react';
 import React from 'react';
 
 type P = {
@@ -9,11 +9,21 @@ type P = {
 };
 
 const nuclearEmoji = '☢️';
+const warningEmoji = '⚠️';
 const maxCol = 3;
 
 class Layout extends React.Component<P, {}> {
   renderCell(rowIdx: number, cellIdx: number) {
     const count = this.props.getOutputMultiplier(rowIdx, cellIdx);
+    const warningPopup =
+      count >= 5 ? (
+        <Popup
+          content="This reactor cannot be refueled automatically"
+          trigger={<div>{warningEmoji}</div>}
+        />
+      ) : (
+        <div></div>
+      );
     const inner =
       count === 0 ? (
         <div></div>
@@ -22,6 +32,7 @@ class Layout extends React.Component<P, {}> {
           {nuclearEmoji}
           <br />
           {count + 'x'}
+          {warningPopup}
         </div>
       );
     return (
