@@ -8,12 +8,9 @@ type S = {
   layout: Array<Array<boolean>>;
 };
 
-const maxCol = 3;
-const emptyLine = [false, false, false];
 const defaultLayout = [
   [false, false, false],
   [false, true, false],
-  [false, false, false],
   [false, false, false],
 ];
 const baseOutput = 40;
@@ -27,6 +24,7 @@ class App extends React.Component<{}, S> {
   }
   handleClick(rowIdx: number, cellIdx: number) {
     const maxRow = this.state.layout.length;
+    const maxCol = this.state.layout[0].length;
     if (rowIdx < 0 || rowIdx >= maxRow) return;
     if (cellIdx < 0 || cellIdx >= maxCol) return;
     this.setState(
@@ -44,6 +42,7 @@ class App extends React.Component<{}, S> {
 
   calculatePower(): number {
     const maxRow = this.state.layout.length;
+    const maxCol = this.state.layout[0].length;
     let accum = 0;
     for (let i = 0; i < maxRow; i++) {
       for (let j = 0; j < maxCol; j++) {
@@ -56,6 +55,7 @@ class App extends React.Component<{}, S> {
   getOutputMultiplier(rowIdx: number, cellIdx: number): number {
     const layout = this.state.layout;
     const maxRow = layout.length;
+    const maxCol = layout[0].length;
     if (!layout[rowIdx][cellIdx]) {
       return 0;
     }
@@ -68,6 +68,9 @@ class App extends React.Component<{}, S> {
   }
 
   addRow() {
+    const maxCol = this.state.layout[0].length;
+    let emptyLine = Array(maxCol);
+    emptyLine.fill(false);
     this.setState(
       update(this.state, {
         layout: {
@@ -77,25 +80,38 @@ class App extends React.Component<{}, S> {
     );
   }
 
+  addCol() {
+    this.setState(
+      update(this.state, {
+        layout: (oldLayout) =>
+          oldLayout.map((oldRow) => {
+            oldRow.push(false);
+            return oldRow;
+          }),
+      })
+    );
+  }
+
   render() {
     return (
       <Container>
-        <Grid columns={2} divided className="stackable">
+        <Grid className="stackable">
           <Grid.Row centered>
             <div style={{ padding: '15px' }}>
               <h1>Factorio Nuclear Power Plant Calculator</h1>
             </div>
           </Grid.Row>
           <Grid.Row centered>
-            <Grid.Column>
+            <Grid.Column wide={10}>
               <Layout
                 layout={this.state.layout}
                 handleClick={this.handleClick.bind(this)}
                 getOutputMultiplier={this.getOutputMultiplier.bind(this)}
                 addRow={this.addRow.bind(this)}
+                addCol={this.addCol.bind(this)}
               ></Layout>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column wide={6}>
               <Calculator output={this.calculatePower()}></Calculator>
             </Grid.Column>
           </Grid.Row>

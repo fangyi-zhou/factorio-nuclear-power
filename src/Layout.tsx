@@ -6,11 +6,11 @@ type P = {
   handleClick: (rowIdx: number, cellIdx: number) => void;
   getOutputMultiplier: (rowIdx: number, cellIdx: number) => number;
   addRow: () => void;
+  addCol: () => void;
 };
 
 const nuclearEmoji = '☢️';
 const warningEmoji = '⚠️';
-const maxCol = 3;
 
 class Layout extends React.Component<P, {}> {
   renderCell(rowIdx: number, cellIdx: number) {
@@ -28,15 +28,15 @@ class Layout extends React.Component<P, {}> {
       count === 0 ? (
         <div></div>
       ) : (
-        <div>
+        <React.Fragment>
           {nuclearEmoji}
           <br />
           {count + 'x'}
           {warningPopup}
-        </div>
+        </React.Fragment>
       );
     return (
-      <Segment style={{ minHeight: '70px' }}>
+      <Segment style={{ minHeight: '70px', minWidth: '70px' }}>
         <div
           onClick={() => {
             this.props.handleClick(rowIdx, cellIdx);
@@ -50,12 +50,16 @@ class Layout extends React.Component<P, {}> {
   }
 
   render() {
+    const maxCol = this.props.layout[0].length;
     return (
-      <Grid celled columns={maxCol}>
+      <Grid celled relaxed columns={'equal'}>
         {this.props.layout.map((row, rowIdx) => (
           <Grid.Row stretched key={`Row-${rowIdx}`}>
             {row.map((cell, cellIdx) => (
-              <Grid.Column key={`Cell-${rowIdx}-${cellIdx}`}>
+              <Grid.Column
+                key={`Cell-${rowIdx}-${cellIdx}`}
+                style={{ padding: '1em' }}
+              >
                 {this.renderCell(rowIdx, cellIdx)}
               </Grid.Column>
             ))}
@@ -65,6 +69,9 @@ class Layout extends React.Component<P, {}> {
           <div style={{ padding: '10px' }}>
             <p>Click on an empty cell to place a nuclear power plant.</p>
             <Button onClick={this.props.addRow}>Add a row</Button>
+            <Button onClick={this.props.addCol} disabled={maxCol >= 6}>
+              Add a column
+            </Button>
           </div>
         </Grid.Row>
       </Grid>

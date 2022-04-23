@@ -24,10 +24,10 @@ class Calculator extends React.Component<P> {
           height: '100%',
         }}
       >
-        <Container text>
+        <Container fluid text>
           <p>This layout produces {this.props.output} MW output.</p>
           <p>
-            {power} MW of power output is consumed by {heatExchanger}{' '}
+            {power} MW of power output is consumed by <b>{heatExchanger}</b>{' '}
             <i>Heat Exchangers</i> (10MW per <i>Heat Exchanger</i>).
           </p>
           <p>
@@ -36,13 +36,14 @@ class Calculator extends React.Component<P> {
             <i>Heat Exchanger</i>).
           </p>
           <p>
-            {steamRounded} <i>Water</i> requires {Math.ceil(offshorePump)} (
-            {offshorePumpRounded}) <i>Offshore Pumps</i> (1200 per{' '}
-            <i>Offshore Pump</i>).
+            {steamRounded} <i>Water</i> requires{' '}
+            <b>{Math.ceil(offshorePump)}</b> ({offshorePumpRounded}){' '}
+            <i>Offshore Pumps</i> (1200 per <i>Offshore Pump</i>).
           </p>
           <p>
-            {steamRounded} <i>Steam</i> is consumed by {Math.ceil(turbine)} (
-            {turbineRounded}) <i>Steam Turbines</i> (60 per <i>Steam Turbine</i>
+            {steamRounded} <i>Steam</i> is consumed by{' '}
+            <b>{Math.ceil(turbine)}</b> ({turbineRounded}) <i>Steam Turbines</i>{' '}
+            (60 per <i>Steam Turbine</i>
             ).
           </p>
         </Container>
