@@ -1,8 +1,9 @@
-import { Container } from 'fomantic-ui-react';
+import { Container, Table } from 'fomantic-ui-react';
 import React from 'react';
 
 type P = {
   output: number;
+  reactors: number;
 };
 
 class Calculator extends React.Component<P> {
@@ -46,6 +47,44 @@ class Calculator extends React.Component<P> {
             (60 per <i>Steam Turbine</i>
             ).
           </p>
+          <Table celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>
+                  <img
+                    alt="Nuclear Reactor"
+                    src="https://wiki.factorio.com/images/thumb/Nuclear_reactor.png/32px-Nuclear_reactor.png"
+                  ></img>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <img
+                    alt="Offshore Pump"
+                    src="https://wiki.factorio.com/images/thumb/Offshore_pump.png/32px-Offshore_pump.png"
+                  ></img>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <img
+                    alt="Heat Exchanger"
+                    src="https://wiki.factorio.com/images/thumb/Heat_exchanger.png/32px-Heat_exchanger.png"
+                  ></img>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <img
+                    alt="Steam Turbine"
+                    src="https://wiki.factorio.com/images/thumb/Steam_turbine.png/32px-Steam_turbine.png"
+                  ></img>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>{this.props.reactors}</Table.Cell>
+                <Table.Cell>{Math.ceil(offshorePumpRounded)}</Table.Cell>
+                <Table.Cell>{heatExchanger}</Table.Cell>
+                <Table.Cell>{Math.ceil(turbineRounded)}</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
         </Container>
       </div>
     );

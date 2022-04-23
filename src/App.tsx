@@ -52,6 +52,18 @@ class App extends React.Component<{}, S> {
     return accum * baseOutput;
   }
 
+  getReactorCount(): number {
+    const maxRow = this.state.layout.length;
+    const maxCol = this.state.layout[0].length;
+    let count = 0;
+    for (let i = 0; i < maxRow; i++) {
+      for (let j = 0; j < maxCol; j++) {
+        if (this.state.layout[i][j]) count++;
+      }
+    }
+    return count;
+  }
+
   getOutputMultiplier(rowIdx: number, cellIdx: number): number {
     const layout = this.state.layout;
     const maxRow = layout.length;
@@ -112,7 +124,10 @@ class App extends React.Component<{}, S> {
               ></Layout>
             </Grid.Column>
             <Grid.Column wide={6}>
-              <Calculator output={this.calculatePower()}></Calculator>
+              <Calculator
+                reactors={this.getReactorCount()}
+                output={this.calculatePower()}
+              ></Calculator>
             </Grid.Column>
           </Grid.Row>
         </Grid>
