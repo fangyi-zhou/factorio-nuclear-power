@@ -53,6 +53,15 @@ class Layout extends React.Component<P, {}> {
     const maxCol = this.props.layout[0].length;
     return (
       <Grid celled relaxed columns={'equal'}>
+        <Grid.Row centered>
+          <div style={{ padding: '10px' }}>
+            <p>Click on an empty cell to place a nuclear power plant.</p>
+            <Button onClick={this.props.addRow}>Add a row</Button>
+            <Button onClick={this.props.addCol} disabled={maxCol >= 6}>
+              Add a column
+            </Button>
+          </div>
+        </Grid.Row>
         {this.props.layout.map((row, rowIdx) => (
           <Grid.Row stretched key={`Row-${rowIdx}`}>
             {row.map((cell, cellIdx) => (
@@ -65,15 +74,6 @@ class Layout extends React.Component<P, {}> {
             ))}
           </Grid.Row>
         ))}
-        <Grid.Row centered>
-          <div style={{ padding: '10px' }}>
-            <p>Click on an empty cell to place a nuclear power plant.</p>
-            <Button onClick={this.props.addRow}>Add a row</Button>
-            <Button onClick={this.props.addCol} disabled={maxCol >= 6}>
-              Add a column
-            </Button>
-          </div>
-        </Grid.Row>
       </Grid>
     );
   }
