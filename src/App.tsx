@@ -13,7 +13,6 @@ const defaultLayout = [
   [false, true, false],
   [false, false, false],
 ];
-const baseOutput = 40;
 
 class App extends React.Component<{}, S> {
   constructor(props: {}) {
@@ -40,7 +39,7 @@ class App extends React.Component<{}, S> {
     );
   }
 
-  calculatePower(): number {
+  calculateSre(): number {
     const maxRow = this.state.layout.length;
     const maxCol = this.state.layout[0].length;
     let accum = 0;
@@ -49,7 +48,7 @@ class App extends React.Component<{}, S> {
         accum += this.getOutputMultiplier(i, j);
       }
     }
-    return accum * baseOutput;
+    return accum;
   }
 
   getReactorCount(): number {
@@ -126,7 +125,7 @@ class App extends React.Component<{}, S> {
             <Grid.Column wide={6}>
               <Calculator
                 reactors={this.getReactorCount()}
-                output={this.calculatePower()}
+                sre={this.calculateSre()}
               ></Calculator>
             </Grid.Column>
           </Grid.Row>

@@ -1,14 +1,16 @@
-import { Container, Table } from 'fomantic-ui-react';
+import { Container, Popup, Table } from 'fomantic-ui-react';
 import React from 'react';
 
 type P = {
-  output: number;
+  sre: number;
   reactors: number;
 };
 
+const baseOutput = 40;
+
 class Calculator extends React.Component<P> {
   render() {
-    const power = this.props.output;
+    const power = this.props.sre * baseOutput;
     const heatExchanger = power / 10;
     const steam = heatExchanger * 103.09;
     const steamRounded = Math.round(steam * 100) / 100;
@@ -26,7 +28,11 @@ class Calculator extends React.Component<P> {
         }}
       >
         <Container fluid text>
-          <p>This layout produces {this.props.output} MW output.</p>
+          <p>
+            This layout produces {power} MW output ({this.props.sre}{' '}
+            <Popup content="Single Reactor Equivalent" trigger={<i>SRE</i>} />
+            ).
+          </p>
           <p>
             {power} MW of power output is consumed by <b>{heatExchanger}</b>{' '}
             <i>Heat Exchangers</i> (10MW per <i>Heat Exchanger</i>).
