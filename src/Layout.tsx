@@ -7,6 +7,8 @@ type P = {
   getOutputMultiplier: (rowIdx: number, cellIdx: number) => number;
   addRow: () => void;
   addCol: () => void;
+  autoFill: boolean;
+  toggleAutoFill: () => void;
 };
 
 const nuclearEmoji = '☢️';
@@ -59,6 +61,9 @@ class Layout extends React.Component<P, {}> {
             <Button onClick={this.props.addRow}>Add a row</Button>
             <Button onClick={this.props.addCol} disabled={maxCol >= 6}>
               Add a column
+            </Button>
+            <Button onClick={this.props.toggleAutoFill}>
+              {this.props.autoFill ? 'Disable' : 'Enable'} Auto Fill
             </Button>
           </div>
         </Grid.Row>

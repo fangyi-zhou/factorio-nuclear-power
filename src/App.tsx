@@ -6,6 +6,7 @@ import Calculator from './Calculator';
 
 type S = {
   layout: Array<Array<boolean>>;
+  autoFill: boolean;
 };
 
 const defaultLayout = [
@@ -19,6 +20,7 @@ class App extends React.Component<{}, S> {
     super(props);
     this.state = {
       layout: defaultLayout,
+      autoFill: false,
     };
   }
   handleClick(rowIdx: number, cellIdx: number) {
@@ -81,7 +83,7 @@ class App extends React.Component<{}, S> {
   addRow() {
     const maxCol = this.state.layout[0].length;
     let emptyLine = Array(maxCol);
-    emptyLine.fill(false);
+    emptyLine.fill(this.state.autoFill);
     this.setState(
       update(this.state, {
         layout: {
@@ -96,10 +98,16 @@ class App extends React.Component<{}, S> {
       update(this.state, {
         layout: (oldLayout) =>
           oldLayout.map((oldRow) => {
-            oldRow.push(false);
+            oldRow.push(this.state.autoFill);
             return oldRow;
           }),
       })
+    );
+  }
+
+  toggleAutoFill() {
+    this.setState(
+      update(this.state, { autoFill: { $set: !this.state.autoFill } })
     );
   }
 
@@ -120,6 +128,8 @@ class App extends React.Component<{}, S> {
                 getOutputMultiplier={this.getOutputMultiplier.bind(this)}
                 addRow={this.addRow.bind(this)}
                 addCol={this.addCol.bind(this)}
+                autoFill={this.state.autoFill}
+                toggleAutoFill={this.toggleAutoFill.bind(this)}
               ></Layout>
             </Grid.Column>
             <Grid.Column wide={6}>
