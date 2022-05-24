@@ -9,6 +9,7 @@ type P = {
   addCol: () => void;
   autoFill: boolean;
   toggleAutoFill: () => void;
+  reset: () => void;
 };
 
 const nuclearEmoji = '☢️';
@@ -65,6 +66,7 @@ class Layout extends React.Component<P, {}> {
             <Button onClick={this.props.toggleAutoFill}>
               {this.props.autoFill ? 'Disable' : 'Enable'} Auto Fill
             </Button>
+            <Button onClick={this.props.reset}>Reset</Button>
           </div>
         </Grid.Row>
         {this.props.layout.map((row, rowIdx) => (

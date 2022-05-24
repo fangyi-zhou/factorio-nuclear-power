@@ -9,7 +9,7 @@ type S = {
   autoFill: boolean;
 };
 
-const defaultLayout = [
+const defaultLayout = () => [
   [false, false, false],
   [false, true, false],
   [false, false, false],
@@ -19,7 +19,7 @@ class App extends React.Component<{}, S> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      layout: defaultLayout,
+      layout: defaultLayout(),
       autoFill: false,
     };
   }
@@ -105,6 +105,16 @@ class App extends React.Component<{}, S> {
     );
   }
 
+  reset() {
+    this.setState(
+      update(this.state, {
+        layout: {
+          $set: defaultLayout(),
+        },
+      })
+    );
+  }
+
   toggleAutoFill() {
     this.setState(
       update(this.state, { autoFill: { $set: !this.state.autoFill } })
@@ -130,6 +140,7 @@ class App extends React.Component<{}, S> {
                 addCol={this.addCol.bind(this)}
                 autoFill={this.state.autoFill}
                 toggleAutoFill={this.toggleAutoFill.bind(this)}
+                reset={this.reset.bind(this)}
               ></Layout>
             </Grid.Column>
             <Grid.Column wide={6}>
