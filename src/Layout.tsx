@@ -7,6 +7,8 @@ type P = {
   getOutputMultiplier: (rowIdx: number, cellIdx: number) => number;
   addRow: () => void;
   addCol: () => void;
+  removeRow: () => void;
+  removeCol: () => void;
   autoFill: boolean;
   toggleAutoFill: () => void;
   reset: () => void;
@@ -59,9 +61,18 @@ class Layout extends React.Component<P, {}> {
         <Grid.Row centered>
           <div style={{ padding: '10px' }}>
             <p>Click on an empty cell to place a nuclear power plant.</p>
-            <Button onClick={this.props.addRow}>Add a row</Button>
+            <Button onClick={this.props.addRow}>+ Row</Button>
+            <Button
+              onClick={this.props.removeRow}
+              disabled={this.props.layout.length === 1}
+            >
+              - Row
+            </Button>
             <Button onClick={this.props.addCol} disabled={maxCol >= 6}>
-              Add a column
+              + Column
+            </Button>
+            <Button onClick={this.props.removeCol} disabled={maxCol === 1}>
+              - Column
             </Button>
             <Button onClick={this.props.toggleAutoFill}>
               {this.props.autoFill ? 'Disable' : 'Enable'} Auto Fill

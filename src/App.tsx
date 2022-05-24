@@ -93,12 +93,36 @@ class App extends React.Component<{}, S> {
     );
   }
 
+  removeRow() {
+    if (this.state.layout.length === 1) return;
+    this.setState(
+      update(this.state, {
+        layout: {
+          $splice: [[this.state.layout.length - 1, 1]],
+        },
+      })
+    );
+  }
+
   addCol() {
     this.setState(
       update(this.state, {
         layout: (oldLayout) =>
           oldLayout.map((oldRow) => {
             oldRow.push(this.state.autoFill);
+            return oldRow;
+          }),
+      })
+    );
+  }
+
+  removeCol() {
+    if (this.state.layout[0].length === 1) return;
+    this.setState(
+      update(this.state, {
+        layout: (oldLayout) =>
+          oldLayout.map((oldRow) => {
+            oldRow.pop();
             return oldRow;
           }),
       })
@@ -138,6 +162,8 @@ class App extends React.Component<{}, S> {
                 getOutputMultiplier={this.getOutputMultiplier.bind(this)}
                 addRow={this.addRow.bind(this)}
                 addCol={this.addCol.bind(this)}
+                removeRow={this.removeRow.bind(this)}
+                removeCol={this.removeCol.bind(this)}
                 autoFill={this.state.autoFill}
                 toggleAutoFill={this.toggleAutoFill.bind(this)}
                 reset={this.reset.bind(this)}
