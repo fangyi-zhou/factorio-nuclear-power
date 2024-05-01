@@ -1,5 +1,11 @@
 import React from 'react';
-import { Container, Divider, Grid } from 'fomantic-ui-react';
+import {
+  Container,
+  Divider,
+  Grid,
+  GridColumn,
+  GridRow,
+} from 'semantic-ui-react';
 import update from 'immutability-helper';
 import Layout from './Layout';
 import Calculator from './Calculator';
@@ -149,14 +155,14 @@ class App extends React.Component<{}, S> {
   render() {
     return (
       <Container>
-        <Grid className="stackable">
-          <Grid.Row centered>
+        <Grid stackable>
+          <GridRow centered>
             <div style={{ padding: '15px' }}>
               <h1>Factorio Nuclear Power Plant Calculator</h1>
             </div>
-          </Grid.Row>
-          <Grid.Row centered>
-            <Grid.Column wide={10}>
+          </GridRow>
+          <GridRow centered>
+            <GridColumn width={10}>
               <Layout
                 layout={this.state.layout}
                 handleClick={this.handleClick.bind(this)}
@@ -169,14 +175,14 @@ class App extends React.Component<{}, S> {
                 toggleAutoFill={this.toggleAutoFill.bind(this)}
                 reset={this.reset.bind(this)}
               ></Layout>
-            </Grid.Column>
-            <Grid.Column wide={6}>
+            </GridColumn>
+            <GridColumn width={6}>
               <Calculator
                 reactors={this.getReactorCount()}
                 sre={this.calculateSre()}
-              ></Calculator>
-            </Grid.Column>
-          </Grid.Row>
+              />
+            </GridColumn>
+          </GridRow>
         </Grid>
         <br />
         <Divider />

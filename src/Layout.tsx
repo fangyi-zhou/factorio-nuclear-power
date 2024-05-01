@@ -1,4 +1,4 @@
-import { Button, Grid, Segment, Popup } from 'fomantic-ui-react';
+import { Button, Grid, Segment, Popup } from 'semantic-ui-react';
 import React from 'react';
 
 type P = {

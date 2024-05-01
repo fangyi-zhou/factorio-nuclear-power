@@ -1,4 +1,4 @@
-import { Container, Popup, Table } from 'fomantic-ui-react';
+import { Container, Popup, Table } from 'semantic-ui-react';
 import React from 'react';
 
 type P = {
