@@ -67,7 +67,8 @@ export const App = () => {
     let accum = 0;
     for (let i = 0; i < maxRow; i++) {
       for (let j = 0; j < maxCol; j++) {
-        accum += 1 + getNeighbourCount(layout, i, j) * neighbouringBonus;
+        if (layout[i][j])
+          accum += getNeighbourCount(layout, i, j) * neighbouringBonus;
       }
     }
     return accum;
