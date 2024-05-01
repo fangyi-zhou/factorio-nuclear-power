@@ -1,5 +1,10 @@
 import { Button, Grid, Segment, Popup } from 'semantic-ui-react';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faCircleRadiation,
+  faWarning,
+} from '@fortawesome/free-solid-svg-icons';
 
 type P = {
   layout: Array<Array<boolean>>;
@@ -14,9 +19,6 @@ type P = {
   reset: () => void;
 };
 
-const nuclearEmoji = '☢️';
-const warningEmoji = '⚠️';
-
 class Layout extends React.Component<P, {}> {
   renderCell(rowIdx: number, cellIdx: number) {
     const count = this.props.getOutputMultiplier(rowIdx, cellIdx);
@@ -30,15 +32,15 @@ class Layout extends React.Component<P, {}> {
         >
           {count !== 0 && (
             <>
-              {nuclearEmoji}
+              <FontAwesomeIcon icon={faCircleRadiation} size="2xl" />
               <br />
-              {count + 'x'}
               {count >= 5 && (
                 <Popup
                   content="This reactor cannot be refueled automatically"
-                  trigger={<div>{warningEmoji}</div>}
+                  trigger={<FontAwesomeIcon icon={faWarning} />}
                 />
               )}
+              {count + 'x'}
             </>
           )}
         </div>
