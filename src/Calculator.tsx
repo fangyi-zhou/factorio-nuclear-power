@@ -4,19 +4,23 @@ import React from 'react';
 type CalculatorProps = {
   sre: number;
   reactorCount: number;
+  reactorOutput: number;
+  heatExchangerConsumption: number;
+  heatExchangerOutput: number;
+  offshorePumpOutput: number;
+  steamTurbineConsumption: number;
 };
 
-const baseOutput = 40;
-
 export const Calculator = (props: CalculatorProps) => {
-  const power = props.sre * baseOutput;
-  const heatExchanger = power / 10;
-  const steam = heatExchanger * 103.09;
+  const power = props.sre * props.reactorOutput;
+  const heatExchanger = power / props.heatExchangerConsumption;
+  const steam = heatExchanger * props.heatExchangerOutput;
   const steamRounded = Math.round(steam * 100) / 100;
-  const offshorePump = steam / 1200; // water = steam
+  const offshorePump = steam / props.offshorePumpOutput; // water = steam
   const offshorePumpRounded = Math.round(offshorePump * 100) / 100;
-  const turbine = steam / 60;
+  const turbine = steam / props.steamTurbineConsumption;
   const turbineRounded = Math.round(turbine * 100) / 100;
+
   return (
     <div
       style={{
@@ -30,25 +34,28 @@ export const Calculator = (props: CalculatorProps) => {
         <p>
           This layout produces {power} MW output ({props.sre}{' '}
           <Popup content="Single Reactor Equivalent" trigger={<i>SRE</i>} />
-          ).
+          {', '}
+          {props.reactorOutput} MW per reactor).
         </p>
         <p>
           {power} MW of power output is consumed by <b>{heatExchanger}</b>{' '}
-          <i>Heat Exchangers</i> (10MW per <i>Heat Exchanger</i>).
-        </p>
-        <p>
-          {heatExchanger} <i>Heat Exchangers</i> boil {steamRounded}{' '}
-          <i>Water</i> to <i>Steam</i> per second (103.09 per{' '}
+          <i>Heat Exchangers</i> ({props.heatExchangerConsumption} MW per{' '}
           <i>Heat Exchanger</i>).
         </p>
         <p>
+          {heatExchanger} <i>Heat Exchangers</i> boil {steamRounded}{' '}
+          <i>Water</i> to <i>Steam</i> per second ({props.heatExchangerOutput}{' '}
+          per <i>Heat Exchanger</i>).
+        </p>
+        <p>
           {steamRounded} <i>Water</i> requires <b>{Math.ceil(offshorePump)}</b>{' '}
-          ({offshorePumpRounded}) <i>Offshore Pumps</i> (1200 per{' '}
-          <i>Offshore Pump</i>).
+          ({offshorePumpRounded}) <i>Offshore Pumps</i> (
+          {props.offshorePumpOutput} per <i>Offshore Pump</i>).
         </p>
         <p>
           {steamRounded} <i>Steam</i> is consumed by <b>{Math.ceil(turbine)}</b>{' '}
-          ({turbineRounded}) <i>Steam Turbines</i> (60 per <i>Steam Turbine</i>
+          ({turbineRounded}) <i>Steam Turbines</i> (
+          {props.steamTurbineConsumption} per <i>Steam Turbine</i>
           ).
         </p>
         <Table celled>

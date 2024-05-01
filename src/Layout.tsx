@@ -5,7 +5,7 @@ import {
   faCircleRadiation,
   faWarning,
 } from '@fortawesome/free-solid-svg-icons';
-import { ReactorLayout, getOutputMultiplier } from './ReactorLayout';
+import { ReactorLayout, getNeighbourCount } from './ReactorLayout';
 
 type LayoutProps = {
   layout: ReactorLayout;
@@ -17,11 +17,13 @@ type LayoutProps = {
   isAutoFillEnabled: boolean;
   toggleAutoFill: () => void;
   reset: () => void;
+  neighbouringBonus: number;
 };
 
 export const Layout = (props: LayoutProps) => {
   const renderCell = (rowIdx: number, cellIdx: number) => {
-    const count = getOutputMultiplier(props.layout, rowIdx, cellIdx);
+    const count = getNeighbourCount(props.layout, rowIdx, cellIdx);
+    const sre = 1 + count * props.neighbouringBonus;
     return (
       <Segment style={{ minHeight: '70px', minWidth: '70px' }}>
         <div
@@ -30,17 +32,17 @@ export const Layout = (props: LayoutProps) => {
           }}
           style={{ textAlign: 'center', height: '100%' }}
         >
-          {count !== 0 && (
+          {props.layout[rowIdx][cellIdx] && (
             <>
               <FontAwesomeIcon icon={faCircleRadiation} size="2xl" />
               <br />
-              {count >= 5 && (
+              {count === 4 && (
                 <Popup
                   content="This reactor cannot be refueled automatically"
                   trigger={<FontAwesomeIcon icon={faWarning} />}
                 />
               )}
-              {count + 'x'}
+              {sre + 'x'}
             </>
           )}
         </div>

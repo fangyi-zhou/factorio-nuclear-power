@@ -6,7 +6,7 @@ export const defaultLayout = (): ReactorLayout => [
   [false, false, false],
 ];
 
-export const getOutputMultiplier = (
+export const getNeighbourCount = (
   layout: ReactorLayout,
   rowIdx: number,
   cellIdx: number
@@ -16,7 +16,7 @@ export const getOutputMultiplier = (
   if (!layout[rowIdx][cellIdx]) {
     return 0;
   }
-  let count = 1;
+  let count = 0;
   if (rowIdx > 0 && layout[rowIdx - 1][cellIdx]) count++;
   if (rowIdx < maxRow - 1 && layout[rowIdx + 1][cellIdx]) count++;
   if (cellIdx > 0 && layout[rowIdx][cellIdx - 1]) count++;

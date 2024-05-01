@@ -1,22 +1,46 @@
 import React from 'react';
 import {
+  Checkbox,
   Container,
   Divider,
+  Form,
+  FormInput,
   Grid,
   GridColumn,
   GridRow,
+  Header,
 } from 'semantic-ui-react';
 import Layout from './Layout';
 import Calculator from './Calculator';
 import {
   ReactorLayout,
   defaultLayout,
-  getOutputMultiplier,
+  getNeighbourCount,
 } from './ReactorLayout';
+
+const handleNumberInput = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  dispatch: React.Dispatch<React.SetStateAction<number>>
+) => {
+  const number = Number(event.target.value);
+  if (!Number.isNaN(number) && number >= 0) {
+    dispatch(number);
+  }
+};
 
 export const App = () => {
   const [layout, setLayout] = React.useState<ReactorLayout>(defaultLayout());
   const [isAutoFillEnabled, setIsAutoFillEnabled] = React.useState(false);
+  const [isCustomisationEnabled, setIsCustomisationEnabled] =
+    React.useState(false);
+  const [reactorOutput, setReactorOutput] = React.useState(40);
+  const [heatExchangerConsumption, setHeatExchangerConsumption] =
+    React.useState(10);
+  const [heatExchangerOutput, setHeatExchangerOutput] = React.useState(103.09);
+  const [offshorePumpOutput, setOffshorePumpOutput] = React.useState(1200);
+  const [steamTurbineConsumption, setSteamTurbineConsumption] =
+    React.useState(60);
+  const [neighbouringBonus, setNeighbouringBonus] = React.useState(1);
 
   const handleClick = React.useCallback(
     (rowIdxToChange: number, cellIdxToChange: number) => {
@@ -43,11 +67,11 @@ export const App = () => {
     let accum = 0;
     for (let i = 0; i < maxRow; i++) {
       for (let j = 0; j < maxCol; j++) {
-        accum += getOutputMultiplier(layout, i, j);
+        accum += getNeighbourCount(layout, i, j) * neighbouringBonus;
       }
     }
     return accum;
-  }, [layout]);
+  }, [layout, neighbouringBonus]);
 
   const reactorCount = React.useMemo((): number => {
     const maxRow = layout.length;
@@ -95,7 +119,7 @@ export const App = () => {
       <Grid stackable>
         <GridRow centered>
           <div style={{ padding: '15px' }}>
-            <h1>Factorio Nuclear Power Plant Calculator</h1>
+            <Header size="huge">Factorio Nuclear Power Plant Calculator</Header>
           </div>
         </GridRow>
         <GridRow centered>
@@ -110,11 +134,86 @@ export const App = () => {
               isAutoFillEnabled={isAutoFillEnabled}
               toggleAutoFill={toggleAutoFill}
               reset={reset}
+              neighbouringBonus={neighbouringBonus}
             />
           </GridColumn>
           <GridColumn width={6}>
-            <Calculator reactorCount={reactorCount} sre={sre} />
+            <Calculator
+              reactorCount={reactorCount}
+              sre={sre}
+              reactorOutput={reactorOutput}
+              heatExchangerConsumption={heatExchangerConsumption}
+              heatExchangerOutput={heatExchangerOutput}
+              offshorePumpOutput={offshorePumpOutput}
+              steamTurbineConsumption={steamTurbineConsumption}
+            />
           </GridColumn>
+        </GridRow>
+        <GridRow>
+          <Grid>
+            <GridRow>
+              <Checkbox
+                toggle
+                label="Customise Parameters"
+                checked={isCustomisationEnabled}
+                onChange={() =>
+                  setIsCustomisationEnabled(!isCustomisationEnabled)
+                }
+              />
+            </GridRow>
+            {isCustomisationEnabled && (
+              <Form>
+                <FormInput
+                  label="Reactor Output"
+                  type="number"
+                  value={reactorOutput}
+                  onChange={(event) =>
+                    handleNumberInput(event, setReactorOutput)
+                  }
+                />
+                <FormInput
+                  label="Heat Exchanger Consumption"
+                  type="number"
+                  value={heatExchangerConsumption}
+                  onChange={(event) =>
+                    handleNumberInput(event, setHeatExchangerConsumption)
+                  }
+                />
+                <FormInput
+                  label="Heat Exchanger Output"
+                  type="number"
+                  value={heatExchangerOutput}
+                  onChange={(event) =>
+                    handleNumberInput(event, setHeatExchangerOutput)
+                  }
+                />
+                <FormInput
+                  label="Offshore Pump Output"
+                  type="number"
+                  value={offshorePumpOutput}
+                  onChange={(event) =>
+                    handleNumberInput(event, setOffshorePumpOutput)
+                  }
+                />
+                <FormInput
+                  label="Steam Turbine Consumption"
+                  type="number"
+                  value={steamTurbineConsumption}
+                  onChange={(event) =>
+                    handleNumberInput(event, setSteamTurbineConsumption)
+                  }
+                />
+                <FormInput
+                  label="Neighbouring Bonus"
+                  type="number"
+                  value={neighbouringBonus}
+                  onChange={(event) =>
+                    handleNumberInput(event, setNeighbouringBonus)
+                  }
+                />
+              </Form>
+            )}
+          </Grid>
         </GridRow>
       </Grid>
       <br />
