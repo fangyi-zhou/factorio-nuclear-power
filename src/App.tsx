@@ -6,204 +6,136 @@ import {
   GridColumn,
   GridRow,
 } from 'semantic-ui-react';
-import update from 'immutability-helper';
 import Layout from './Layout';
 import Calculator from './Calculator';
+import {
+  ReactorLayout,
+  defaultLayout,
+  getOutputMultiplier,
+} from './ReactorLayout';
 
-type S = {
-  layout: Array<Array<boolean>>;
-  autoFill: boolean;
-};
+export const App = () => {
+  const [layout, setLayout] = React.useState<ReactorLayout>(defaultLayout());
+  const [isAutoFillEnabled, setIsAutoFillEnabled] = React.useState(false);
 
-const defaultLayout = () => [
-  [false, false, false],
-  [false, true, false],
-  [false, false, false],
-];
+  const handleClick = React.useCallback(
+    (rowIdxToChange: number, cellIdxToChange: number) => {
+      const maxRow = layout.length;
+      const maxCol = layout[0].length;
+      if (rowIdxToChange < 0 || rowIdxToChange >= maxRow) return;
+      if (cellIdxToChange < 0 || cellIdxToChange >= maxCol) return;
+      setLayout(
+        layout.map((row, rowIdx) =>
+          rowIdx !== rowIdxToChange
+            ? row
+            : row.map((cell, cellIdx) =>
+                cellIdx !== cellIdxToChange ? cell : !cell
+              )
+        )
+      );
+    },
+    [layout]
+  );
 
-class App extends React.Component<{}, S> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      layout: defaultLayout(),
-      autoFill: false,
-    };
-  }
-
-  handleClick(rowIdx: number, cellIdx: number) {
-    const maxRow = this.state.layout.length;
-    const maxCol = this.state.layout[0].length;
-    if (rowIdx < 0 || rowIdx >= maxRow) return;
-    if (cellIdx < 0 || cellIdx >= maxCol) return;
-    this.setState(
-      update(this.state, {
-        layout: {
-          [rowIdx]: {
-            [cellIdx]: {
-              $set: !this.state.layout[rowIdx][cellIdx],
-            },
-          },
-        },
-      })
-    );
-  }
-
-  calculateSre(): number {
-    const maxRow = this.state.layout.length;
-    const maxCol = this.state.layout[0].length;
+  const sre = React.useMemo((): number => {
+    const maxRow = layout.length;
+    const maxCol = layout[0].length;
     let accum = 0;
     for (let i = 0; i < maxRow; i++) {
       for (let j = 0; j < maxCol; j++) {
-        accum += this.getOutputMultiplier(i, j);
+        accum += getOutputMultiplier(layout, i, j);
       }
     }
     return accum;
-  }
+  }, [layout]);
 
-  getReactorCount(): number {
-    const maxRow = this.state.layout.length;
-    const maxCol = this.state.layout[0].length;
+  const reactorCount = React.useMemo((): number => {
+    const maxRow = layout.length;
+    const maxCol = layout[0].length;
     let count = 0;
     for (let i = 0; i < maxRow; i++) {
       for (let j = 0; j < maxCol; j++) {
-        if (this.state.layout[i][j]) count++;
+        if (layout[i][j]) count++;
       }
     }
     return count;
-  }
+  }, [layout]);
 
-  getOutputMultiplier(rowIdx: number, cellIdx: number): number {
-    const layout = this.state.layout;
-    const maxRow = layout.length;
+  const addRow = React.useCallback(() => {
     const maxCol = layout[0].length;
-    if (!layout[rowIdx][cellIdx]) {
-      return 0;
-    }
-    let count = 1;
-    if (rowIdx > 0 && layout[rowIdx - 1][cellIdx]) count++;
-    if (rowIdx < maxRow - 1 && layout[rowIdx + 1][cellIdx]) count++;
-    if (cellIdx > 0 && layout[rowIdx][cellIdx - 1]) count++;
-    if (cellIdx < maxCol - 1 && layout[rowIdx][cellIdx + 1]) count++;
-    return count;
-  }
-
-  addRow() {
-    const maxCol = this.state.layout[0].length;
     let emptyLine = Array(maxCol);
-    emptyLine.fill(this.state.autoFill);
-    this.setState(
-      update(this.state, {
-        layout: {
-          $push: [emptyLine],
-        },
-      })
-    );
-  }
+    emptyLine.fill(isAutoFillEnabled);
+    setLayout([...layout, emptyLine]);
+  }, [layout, isAutoFillEnabled]);
 
-  removeRow() {
-    if (this.state.layout.length === 1) return;
-    this.setState(
-      update(this.state, {
-        layout: {
-          $splice: [[this.state.layout.length - 1, 1]],
-        },
-      })
-    );
-  }
+  const removeRow = React.useCallback(() => {
+    if (layout.length === 1) return;
+    setLayout(layout.slice(0, layout.length - 1));
+  }, [layout]);
 
-  addCol() {
-    this.setState(
-      update(this.state, {
-        layout: (oldLayout) =>
-          oldLayout.map((oldRow) => {
-            oldRow.push(this.state.autoFill);
-            return oldRow;
-          }),
-      })
-    );
-  }
+  const addCol = React.useCallback(() => {
+    setLayout(layout.map((row) => [...row, isAutoFillEnabled]));
+  }, [layout, isAutoFillEnabled]);
 
-  removeCol() {
-    if (this.state.layout[0].length === 1) return;
-    this.setState(
-      update(this.state, {
-        layout: (oldLayout) =>
-          oldLayout.map((oldRow) => {
-            oldRow.pop();
-            return oldRow;
-          }),
-      })
-    );
-  }
+  const removeCol = React.useCallback(() => {
+    if (layout[0].length === 1) return;
+    setLayout(layout.map((row) => row.slice(0, row.length - 1)));
+  }, [layout]);
 
-  reset() {
-    this.setState(
-      update(this.state, {
-        layout: {
-          $set: defaultLayout(),
-        },
-      })
-    );
-  }
+  const reset = React.useCallback(() => {
+    setLayout(defaultLayout());
+  }, []);
 
-  toggleAutoFill() {
-    this.setState(
-      update(this.state, { autoFill: { $set: !this.state.autoFill } })
-    );
-  }
+  const toggleAutoFill = React.useCallback(() => {
+    setIsAutoFillEnabled(!isAutoFillEnabled);
+  }, [isAutoFillEnabled]);
 
-  render() {
-    return (
-      <Container>
-        <Grid stackable>
-          <GridRow centered>
-            <div style={{ padding: '15px' }}>
-              <h1>Factorio Nuclear Power Plant Calculator</h1>
-            </div>
-          </GridRow>
-          <GridRow centered>
-            <GridColumn width={10}>
-              <Layout
-                layout={this.state.layout}
-                handleClick={this.handleClick.bind(this)}
-                getOutputMultiplier={this.getOutputMultiplier.bind(this)}
-                addRow={this.addRow.bind(this)}
-                addCol={this.addCol.bind(this)}
-                removeRow={this.removeRow.bind(this)}
-                removeCol={this.removeCol.bind(this)}
-                autoFill={this.state.autoFill}
-                toggleAutoFill={this.toggleAutoFill.bind(this)}
-                reset={this.reset.bind(this)}
-              ></Layout>
-            </GridColumn>
-            <GridColumn width={6}>
-              <Calculator
-                reactors={this.getReactorCount()}
-                sre={this.calculateSre()}
-              />
-            </GridColumn>
-          </GridRow>
-        </Grid>
-        <br />
-        <Divider />
-        <div style={{ textAlign: 'center' }}>
-          <p>
-            This calculator is &nbsp;
-            <a href="https://github.com/fangyi-zhou/factorio-nuclear-power/">
-              open source
-            </a>
-            .
-          </p>
-          <p>
-            See also: &nbsp;
-            <a href="https://alt-f4.blog/ALTF4-57/">
-              Alt-F4 #57 - Nuclear Energy and You
-            </a>
-          </p>
-        </div>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <Grid stackable>
+        <GridRow centered>
+          <div style={{ padding: '15px' }}>
+            <h1>Factorio Nuclear Power Plant Calculator</h1>
+          </div>
+        </GridRow>
+        <GridRow centered>
+          <GridColumn width={10}>
+            <Layout
+              layout={layout}
+              handleClick={handleClick}
+              addRow={addRow}
+              addCol={addCol}
+              removeRow={removeRow}
+              removeCol={removeCol}
+              isAutoFillEnabled={isAutoFillEnabled}
+              toggleAutoFill={toggleAutoFill}
+              reset={reset}
+            />
+          </GridColumn>
+          <GridColumn width={6}>
+            <Calculator reactorCount={reactorCount} sre={sre} />
+          </GridColumn>
+        </GridRow>
+      </Grid>
+      <br />
+      <Divider />
+      <div style={{ textAlign: 'center' }}>
+        <p>
+          This calculator is &nbsp;
+          <a href="https://github.com/fangyi-zhou/factorio-nuclear-power/">
+            open source
+          </a>
+          .
+        </p>
+        <p>
+          See also: &nbsp;
+          <a href="https://alt-f4.blog/ALTF4-57/">
+            Alt-F4 #57 - Nuclear Energy and You
+          </a>
+        </p>
+      </div>
+    </Container>
+  );
+};
 
 export default App;
