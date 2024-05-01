@@ -23,6 +23,7 @@ class App extends React.Component<{}, S> {
       autoFill: false,
     };
   }
+
   handleClick(rowIdx: number, cellIdx: number) {
     const maxRow = this.state.layout.length;
     const maxCol = this.state.layout[0].length;

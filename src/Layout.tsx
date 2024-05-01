@@ -20,26 +20,6 @@ const warningEmoji = '⚠️';
 class Layout extends React.Component<P, {}> {
   renderCell(rowIdx: number, cellIdx: number) {
     const count = this.props.getOutputMultiplier(rowIdx, cellIdx);
-    const warningPopup =
-      count >= 5 ? (
-        <Popup
-          content="This reactor cannot be refueled automatically"
-          trigger={<div>{warningEmoji}</div>}
-        />
-      ) : (
-        <div></div>
-      );
-    const inner =
-      count === 0 ? (
-        <div></div>
-      ) : (
-        <React.Fragment>
-          {nuclearEmoji}
-          <br />
-          {count + 'x'}
-          {warningPopup}
-        </React.Fragment>
-      );
     return (
       <Segment style={{ minHeight: '70px', minWidth: '70px' }}>
         <div
@@ -48,7 +28,19 @@ class Layout extends React.Component<P, {}> {
           }}
           style={{ textAlign: 'center', height: '100%' }}
         >
-          {inner}
+          {count !== 0 && (
+            <>
+              {nuclearEmoji}
+              <br />
+              {count + 'x'}
+              {count >= 5 && (
+                <Popup
+                  content="This reactor cannot be refueled automatically"
+                  trigger={<div>{warningEmoji}</div>}
+                />
+              )}
+            </>
+          )}
         </div>
       </Segment>
     );
