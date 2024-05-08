@@ -119,7 +119,7 @@ export const App = () => {
     <Container>
       <Grid stackable>
         <GridRow centered>
-          <div style={{ padding: '15px' }}>
+          <div style={{ padding: '15px' }} role="heading" aria-level={1}>
             <Header size="huge">Factorio Nuclear Power Plant Calculator</Header>
           </div>
         </GridRow>

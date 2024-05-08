@@ -31,6 +31,10 @@ export const Layout = (props: LayoutProps) => {
             props.handleClick(rowIdx, cellIdx);
           }}
           style={{ textAlign: 'center', height: '100%' }}
+          role="button"
+          aria-label={`Cell ${rowIdx}, ${cellIdx} (${
+            props.layout[rowIdx][cellIdx] ? 'Occupied' : 'Unoccupied'
+          })`}
         >
           {props.layout[rowIdx][cellIdx] && (
             <>
@@ -54,7 +58,7 @@ export const Layout = (props: LayoutProps) => {
   return (
     <Grid celled relaxed columns={'equal'}>
       <Grid.Row centered>
-        <div style={{ padding: '10px' }}>
+        <div style={{ padding: '10px' }} role="toolbar">
           <p>Click on an empty cell to place a nuclear power plant.</p>
           <Button onClick={props.addRow}>+ Row</Button>
           <Button
