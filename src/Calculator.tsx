@@ -7,6 +7,7 @@ type CalculatorProps = {
   reactorOutput: number;
   heatExchangerConsumption: number;
   heatExchangerOutput: number;
+  heatExchangerOutputRatio: number;
   offshorePumpOutput: number;
   steamTurbineConsumption: number;
 };
@@ -16,7 +17,9 @@ export const Calculator = (props: CalculatorProps) => {
   const heatExchanger = power / props.heatExchangerConsumption;
   const steam = heatExchanger * props.heatExchangerOutput;
   const steamRounded = Math.round(steam * 100) / 100;
-  const offshorePump = steam / props.offshorePumpOutput; // water = steam
+  const water = steam / props.heatExchangerOutputRatio; // water : steam = ratio
+  const waterRounded = Math.round(water * 1000) / 1000;
+  const offshorePump = water / props.offshorePumpOutput;
   const offshorePumpRounded = Math.round(offshorePump * 100) / 100;
   const turbine = steam / props.steamTurbineConsumption;
   const turbineRounded = Math.round(turbine * 100) / 100;
@@ -43,12 +46,12 @@ export const Calculator = (props: CalculatorProps) => {
           <i>Heat Exchanger</i>).
         </p>
         <p>
-          {heatExchanger} <i>Heat Exchangers</i> boil {steamRounded}{' '}
-          <i>Water</i> to <i>Steam</i> per second ({props.heatExchangerOutput}{' '}
-          per <i>Heat Exchanger</i>).
+          {heatExchanger} <i>Heat Exchangers</i> boil {waterRounded}{' '}
+          <i>Water</i> to {steamRounded} <i>Steam</i> per second (
+          {props.heatExchangerOutput} per <i>Heat Exchanger</i>).
         </p>
         <p>
-          {steamRounded} <i>Water</i> requires <b>{Math.ceil(offshorePump)}</b>{' '}
+          {waterRounded} <i>Water</i> requires <b>{Math.ceil(offshorePump)}</b>{' '}
           ({offshorePumpRounded}) <i>Offshore Pumps</i> (
           {props.offshorePumpOutput} per <i>Offshore Pump</i>).
         </p>

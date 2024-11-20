@@ -37,6 +37,8 @@ export const App = () => {
   const [heatExchangerConsumption, setHeatExchangerConsumption] =
     React.useState(10);
   const [heatExchangerOutput, setHeatExchangerOutput] = React.useState(103.09);
+  const [heatExchangerOutputRatio, setHeatExchangerOutputRatio] =
+    React.useState(10);
   const [offshorePumpOutput, setOffshorePumpOutput] = React.useState(1200);
   const [steamTurbineConsumption, setSteamTurbineConsumption] =
     React.useState(60);
@@ -145,6 +147,7 @@ export const App = () => {
               reactorOutput={reactorOutput}
               heatExchangerConsumption={heatExchangerConsumption}
               heatExchangerOutput={heatExchangerOutput}
+              heatExchangerOutputRatio={heatExchangerOutputRatio}
               offshorePumpOutput={offshorePumpOutput}
               steamTurbineConsumption={steamTurbineConsumption}
             />
@@ -186,6 +189,14 @@ export const App = () => {
                   value={heatExchangerOutput}
                   onChange={(event) =>
                     handleNumberInput(event, setHeatExchangerOutput)
+                  }
+                />
+                <FormInput
+                  label="Heat Exchanger Output Ratio"
+                  type="number"
+                  value={heatExchangerOutputRatio}
+                  onChange={(event) =>
+                    handleNumberInput(event, setHeatExchangerOutputRatio)
                   }
                 />
                 <FormInput
