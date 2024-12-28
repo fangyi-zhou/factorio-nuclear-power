@@ -29,7 +29,7 @@ const handleNumberInput = (
 };
 
 export const App = () => {
-  const [layout, setLayout] = React.useState<ReactorLayout>(defaultLayout());
+  const [layout, setLayout] = React.useState<ReactorLayout>(defaultLayout);
   const [isAutoFillEnabled, setIsAutoFillEnabled] = React.useState(false);
   const [isCustomisationEnabled, setIsCustomisationEnabled] =
     React.useState(false);
@@ -110,7 +110,7 @@ export const App = () => {
   }, [layout]);
 
   const reset = React.useCallback(() => {
-    setLayout(defaultLayout());
+    setLayout(defaultLayout);
   }, []);
 
   const toggleAutoFill = React.useCallback(() => {
@@ -142,14 +142,24 @@ export const App = () => {
           </GridColumn>
           <GridColumn width={6}>
             <Calculator
-              reactorCount={reactorCount}
+              nuclearReactorCount={reactorCount}
               sre={sre}
-              reactorOutput={reactorOutput}
-              heatExchangerConsumption={heatExchangerConsumption}
-              heatExchangerOutput={heatExchangerOutput}
-              heatExchangerOutputRatio={heatExchangerOutputRatio}
-              offshorePumpOutput={offshorePumpOutput}
-              steamTurbineConsumption={steamTurbineConsumption}
+              nuclearReactorProps={{
+                heatOutput: reactorOutput,
+              }}
+              heatExchangerProps={{
+                heatOutput: heatExchangerOutput,
+                energyConsumption: heatExchangerConsumption,
+                fluidConsumption:
+                  heatExchangerOutput / heatExchangerOutputRatio,
+              }}
+              offshorePumpProps={{
+                pumpingSpeed: offshorePumpOutput,
+              }}
+              steamTurbineProps={{
+                fluidConsumption: steamTurbineConsumption,
+                powerOutput: 5.82,
+              }}
             />
           </GridColumn>
         </GridRow>
