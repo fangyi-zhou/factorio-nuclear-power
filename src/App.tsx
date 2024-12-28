@@ -17,6 +17,7 @@ import {
   defaultLayout,
   getNeighbourCount,
 } from './ReactorLayout';
+import { TextDisplayConfigContext } from './Contexts';
 
 const handleNumberInput = (
   event: React.ChangeEvent<HTMLInputElement>,
@@ -33,6 +34,8 @@ export const App = () => {
   const [isAutoFillEnabled, setIsAutoFillEnabled] = React.useState(false);
   const [isCustomisationEnabled, setIsCustomisationEnabled] =
     React.useState(false);
+  const [shouldDisplayIcon, setShouldDisplayIcon] = React.useState(true);
+
   const [reactorOutput, setReactorOutput] = React.useState(40);
   const [heatExchangerConsumption, setHeatExchangerConsumption] =
     React.useState(10);
@@ -141,30 +144,40 @@ export const App = () => {
             />
           </GridColumn>
           <GridColumn width={6}>
-            <Calculator
-              nuclearReactorCount={reactorCount}
-              sre={sre}
-              nuclearReactorProps={{
-                heatOutput: reactorOutput,
-              }}
-              heatExchangerProps={{
-                heatOutput: heatExchangerOutput,
-                energyConsumption: heatExchangerConsumption,
-                fluidConsumption:
-                  heatExchangerOutput / heatExchangerOutputRatio,
-              }}
-              offshorePumpProps={{
-                pumpingSpeed: offshorePumpOutput,
-              }}
-              steamTurbineProps={{
-                fluidConsumption: steamTurbineConsumption,
-                powerOutput: 5.82,
-              }}
-            />
+            <TextDisplayConfigContext.Provider value={{ shouldDisplayIcon }}>
+              <Calculator
+                nuclearReactorCount={reactorCount}
+                sre={sre}
+                nuclearReactorProps={{
+                  heatOutput: reactorOutput,
+                }}
+                heatExchangerProps={{
+                  heatOutput: heatExchangerOutput,
+                  energyConsumption: heatExchangerConsumption,
+                  fluidConsumption:
+                    heatExchangerOutput / heatExchangerOutputRatio,
+                }}
+                offshorePumpProps={{
+                  pumpingSpeed: offshorePumpOutput,
+                }}
+                steamTurbineProps={{
+                  fluidConsumption: steamTurbineConsumption,
+                  powerOutput: 5.82,
+                }}
+              />
+            </TextDisplayConfigContext.Provider>
           </GridColumn>
         </GridRow>
         <GridRow>
           <Grid>
+            <GridRow>
+              <Checkbox
+                toggle
+                label="Hide Inline Icons"
+                checked={!shouldDisplayIcon}
+                onChange={() => setShouldDisplayIcon(!shouldDisplayIcon)}
+              />
+            </GridRow>
             <GridRow>
               <Checkbox
                 toggle

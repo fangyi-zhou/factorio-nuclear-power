@@ -6,6 +6,7 @@ import {
   OffshorePumpProps,
   SteamTurbineProps,
 } from './Constants';
+import { TextDisplayConfigContext } from './Contexts';
 
 type CalculatorProps = {
   sre: number;
@@ -15,6 +16,81 @@ type CalculatorProps = {
   offshorePumpProps: OffshorePumpProps;
   steamTurbineProps: SteamTurbineProps;
 };
+
+const inlineImageHeight = '25px';
+
+interface InlineTextProps {
+  text: string;
+  altText: string;
+  src: string;
+}
+
+const InlineText = ({ text, altText, src }: InlineTextProps) => {
+  const textDisplayConfigContext = React.useContext(TextDisplayConfigContext);
+  return (
+    <>
+      <i>{text}</i>
+      {textDisplayConfigContext.shouldDisplayIcon && (
+        <>
+          &nbsp;
+          <img height={inlineImageHeight} alt={altText} src={src} />
+        </>
+      )}
+    </>
+  );
+};
+
+interface InlineTextDisplayProps {
+  plural?: boolean;
+}
+
+const NuclearReactorInlineText = ({ plural }: InlineTextDisplayProps) => (
+  <InlineText
+    text={'Nuclear Reactor' + (plural ? 's' : '')}
+    altText="Nuclear Reactor"
+    src="https://wiki.factorio.com/images/Nuclear_reactor.png"
+  />
+);
+
+const HeatExchangerInlineText = ({ plural }: InlineTextDisplayProps) => (
+  <InlineText
+    text={'Heat Exchanger' + (plural ? 's' : '')}
+    altText="Heat Exchanger"
+    src="https://wiki.factorio.com/images/Heat_exchanger.png"
+  />
+);
+
+const WaterInlineText = (props: InlineTextDisplayProps) => (
+  <InlineText
+    text="Water"
+    altText="Water"
+    src="https://wiki.factorio.com/images/Water.png"
+  />
+);
+
+const SteamInlineText = (props: InlineTextDisplayProps) => (
+  <InlineText
+    text="Steam"
+    altText="Steam"
+    src="https://wiki.factorio.com/images/Steam.png"
+  />
+);
+
+const OffshorePumpInlineText = ({ plural }: InlineTextDisplayProps) => (
+  <InlineText
+    text={'Offshore Pump' + (plural ? 's' : '')}
+    altText="Offshore Pump"
+    src="https://wiki.factorio.com/images/Offshore_pump.png"
+  />
+);
+
+const SteamTurbineInlineText = ({ plural }: InlineTextDisplayProps) => (
+  <InlineText
+    text={'Steam Turbine' + (plural ? 's' : '')}
+    altText="Steam Turbine"
+    src="https://wiki.factorio.com/images/Steam_turbine.png"
+  />
+);
 
 export const Calculator = (props: CalculatorProps) => {
   const heatOutput = props.sre * props.nuclearReactorProps.heatOutput;
@@ -59,37 +135,47 @@ export const Calculator = (props: CalculatorProps) => {
           This layout produces {heatOutput} MW heat output ({props.sre}{' '}
           <Popup content="Single Reactor Equivalent" trigger={<i>SRE</i>} />
           {', '}
-          {props.nuclearReactorProps.heatOutput} MW per <i>Nuclear Reactor</i>).
+          {props.nuclearReactorProps.heatOutput} MW per{' '}
+          <NuclearReactorInlineText />
+          ).
         </p>
         <p>
           {heatOutput} MW of heat output is consumed by{' '}
           <b>{Math.ceil(heatExchangerCount)}</b> (
-          {Math.ceil(heatExchangerCountRounded)}) <i>Heat Exchangers</i> (
-          {props.heatExchangerProps.energyConsumption} MW per{' '}
-          <i>Heat Exchanger</i>).
-        </p>
-        <p>
-          {heatExchangerCountRounded} <i>Heat Exchangers</i> boil {waterRounded}{' '}
-          <i>Water</i> to {steamRounded} <i>Steam</i> per second (
-          {props.heatExchangerProps.fluidConsumption} <i>Water</i> to{' '}
-          {props.heatExchangerProps.heatOutput} <i>Steam</i> per{' '}
-          <i>Heat Exchanger</i>
+          {Math.ceil(heatExchangerCountRounded)}){' '}
+          <HeatExchangerInlineText plural={Math.ceil(heatExchangerCount) > 1} />{' '}
+          ({props.heatExchangerProps.energyConsumption} MW per{' '}
+          <HeatExchangerInlineText />
           ).
         </p>
         <p>
-          {waterRounded} <i>Water</i> requires{' '}
-          <b>{Math.ceil(offshorePumpCount)}</b> ({offshorePumpCountRounded}){' '}
-          <i>Offshore Pumps</i> ({props.offshorePumpProps.pumpingSpeed}{' '}
-          <i>Water</i>
-          per second per <i>Offshore Pump</i>).
+          {heatExchangerCountRounded}{' '}
+          <HeatExchangerInlineText plural={Math.ceil(heatExchangerCount) > 1} />{' '}
+          boil {waterRounded} <WaterInlineText />
+          /s to {steamRounded} <SteamInlineText />
+          /s ({props.heatExchangerProps.fluidConsumption} <WaterInlineText />
+          /s to {props.heatExchangerProps.heatOutput} <SteamInlineText />
+          /s per <HeatExchangerInlineText />
+          ).
         </p>
         <p>
-          {steamRounded} <i>Steam</i> is consumed by{' '}
-          <b>{Math.ceil(steamTurbineCount)}</b> ({steamTurbineCountRounded}){' '}
-          <i>Steam Turbines</i>, producing {electricityOutputRounded} MW
-          electricity ({props.steamTurbineProps.fluidConsumption} Steam to{' '}
-          {props.steamTurbineProps.powerOutput}MW electricity per{' '}
-          <i>Steam Turbine</i>
+          {waterRounded} <WaterInlineText />
+          /s requires <b>{Math.ceil(offshorePumpCount)}</b> (
+          {offshorePumpCountRounded}){' '}
+          <OffshorePumpInlineText plural={Math.ceil(offshorePumpCount) > 1} /> (
+          {props.offshorePumpProps.pumpingSpeed} <WaterInlineText />
+          /s per <OffshorePumpInlineText />
+          ).
+        </p>
+        <p>
+          {steamRounded} <SteamInlineText />
+          /s is consumed by <b>{Math.ceil(steamTurbineCount)}</b> (
+          {steamTurbineCountRounded}){' '}
+          <SteamTurbineInlineText plural={Math.ceil(steamTurbineCount) > 1} />,
+          producing {electricityOutputRounded} MW electricity (
+          {props.steamTurbineProps.fluidConsumption} <SteamInlineText />
+          /s to {props.steamTurbineProps.powerOutput} MW electricity per{' '}
+          <SteamTurbineInlineText />
           ).
         </p>
         <Table celled>
@@ -98,26 +184,30 @@ export const Calculator = (props: CalculatorProps) => {
               <Table.HeaderCell>
                 <img
                   alt="Nuclear Reactor"
-                  src="https://wiki.factorio.com/images/thumb/Nuclear_reactor.png/32px-Nuclear_reactor.png"
-                ></img>
+                  height="40px"
+                  src="https://wiki.factorio.com/images/Nuclear_reactor.png"
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <img
                   alt="Offshore Pump"
-                  src="https://wiki.factorio.com/images/thumb/Offshore_pump.png/32px-Offshore_pump.png"
-                ></img>
+                  height="40px"
+                  src="https://wiki.factorio.com/images/Offshore_pump.png"
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <img
                   alt="Heat Exchanger"
-                  src="https://wiki.factorio.com/images/thumb/Heat_exchanger.png/32px-Heat_exchanger.png"
-                ></img>
+                  height="40px"
+                  src="https://wiki.factorio.com/images/Heat_exchanger.png"
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <img
                   alt="Steam Turbine"
-                  src="https://wiki.factorio.com/images/thumb/Steam_turbine.png/32px-Steam_turbine.png"
-                ></img>
+                  height="40px"
+                  src="https://wiki.factorio.com/images/Steam_turbine.png"
+                />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
