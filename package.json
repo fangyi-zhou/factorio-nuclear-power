@@ -18,14 +18,16 @@
     "react-scripts": "5.0.1",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5",
-    "typescript": "^4.4.2",
+    "typescript": "^5.7.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier -w src",
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": [

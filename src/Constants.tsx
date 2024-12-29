@@ -31,6 +31,8 @@ const legendaryNuclearReactor: NuclearReactorProps = {
   heatOutput: 100,
 };
 
+export const nuclearReactorNeighbouringBonus = 1;
+
 export const getNuclearReactorProps = (quality: Quality) => {
   switch (quality) {
     case Quality.Normal:

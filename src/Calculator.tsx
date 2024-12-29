@@ -1,20 +1,10 @@
 import { Container, Popup, Table } from 'semantic-ui-react';
 import React from 'react';
-import {
-  HeatExchangerProps,
-  NuclearReactorProps,
-  OffshorePumpProps,
-  SteamTurbineProps,
-} from './Constants';
-import { TextDisplayConfigContext } from './Contexts';
+import { EntityConfigContext, TextDisplayConfigContext } from './Contexts';
 
 type CalculatorProps = {
   sre: number;
   nuclearReactorCount: number;
-  nuclearReactorProps: NuclearReactorProps;
-  heatExchangerProps: HeatExchangerProps;
-  offshorePumpProps: OffshorePumpProps;
-  steamTurbineProps: SteamTurbineProps;
 };
 
 const inlineImageHeight = '25px';
@@ -93,32 +83,37 @@ const SteamTurbineInlineText = ({ plural }: InlineTextDisplayProps) => (
 );
 
 export const Calculator = (props: CalculatorProps) => {
-  const heatOutput = props.sre * props.nuclearReactorProps.heatOutput;
+  const entityConfig = React.useContext(EntityConfigContext);
+  const {
+    nuclearReactorProps,
+    heatExchangerProps,
+    offshorePumpProps,
+    steamTurbineProps,
+  } = entityConfig;
+  const heatOutput = props.sre * nuclearReactorProps.heatOutput;
 
   // Converts all heat from Nuclear Reactor using Heat Exchanger
-  const heatExchangerCount =
-    heatOutput / props.heatExchangerProps.energyConsumption;
+  const heatExchangerCount = heatOutput / heatExchangerProps.energyConsumption;
   const heatExchangerCountRounded = Math.round(heatExchangerCount * 100) / 100;
 
   // Heat Exchanger produces steam
-  const steam = heatExchangerCount * props.heatExchangerProps.heatOutput;
+  const steam = heatExchangerCount * heatExchangerProps.heatOutput;
   const steamRounded = Math.round(steam * 100) / 100;
 
   // Heat Exchanger consumes water
-  const water = heatExchangerCount * props.heatExchangerProps.fluidConsumption;
+  const water = heatExchangerCount * heatExchangerProps.fluidConsumption;
   const waterRounded = Math.round(water * 100) / 100;
 
   // Water comes from Offshore Pump
-  const offshorePumpCount = water / props.offshorePumpProps.pumpingSpeed;
+  const offshorePumpCount = water / offshorePumpProps.pumpingSpeed;
   const offshorePumpCountRounded = Math.round(offshorePumpCount * 100) / 100;
 
   // Steam Turbine consumes steam
-  const steamTurbineCount = steam / props.steamTurbineProps.fluidConsumption;
+  const steamTurbineCount = steam / steamTurbineProps.fluidConsumption;
   const steamTurbineCountRounded = Math.round(steamTurbineCount * 100) / 100;
 
   // Steam Turbine generates Electricity
-  const electricityOutput =
-    steamTurbineCount * props.steamTurbineProps.powerOutput;
+  const electricityOutput = steamTurbineCount * steamTurbineProps.powerOutput;
   const electricityOutputRounded = Math.round(electricityOutput * 100) / 100;
 
   return (
@@ -135,8 +130,7 @@ export const Calculator = (props: CalculatorProps) => {
           This layout produces {heatOutput} MW heat output ({props.sre}{' '}
           <Popup content="Single Reactor Equivalent" trigger={<i>SRE</i>} />
           {', '}
-          {props.nuclearReactorProps.heatOutput} MW per{' '}
-          <NuclearReactorInlineText />
+          {nuclearReactorProps.heatOutput} MW per <NuclearReactorInlineText />
           ).
         </p>
         <p>
@@ -144,7 +138,7 @@ export const Calculator = (props: CalculatorProps) => {
           <b>{Math.ceil(heatExchangerCount)}</b> (
           {Math.ceil(heatExchangerCountRounded)}){' '}
           <HeatExchangerInlineText plural={Math.ceil(heatExchangerCount) > 1} />{' '}
-          ({props.heatExchangerProps.energyConsumption} MW per{' '}
+          ({heatExchangerProps.energyConsumption} MW per{' '}
           <HeatExchangerInlineText />
           ).
         </p>
@@ -153,8 +147,8 @@ export const Calculator = (props: CalculatorProps) => {
           <HeatExchangerInlineText plural={Math.ceil(heatExchangerCount) > 1} />{' '}
           boil {waterRounded} <WaterInlineText />
           /s to {steamRounded} <SteamInlineText />
-          /s ({props.heatExchangerProps.fluidConsumption} <WaterInlineText />
-          /s to {props.heatExchangerProps.heatOutput} <SteamInlineText />
+          /s ({heatExchangerProps.fluidConsumption} <WaterInlineText />
+          /s to {heatExchangerProps.heatOutput} <SteamInlineText />
           /s per <HeatExchangerInlineText />
           ).
         </p>
@@ -163,7 +157,7 @@ export const Calculator = (props: CalculatorProps) => {
           /s requires <b>{Math.ceil(offshorePumpCount)}</b> (
           {offshorePumpCountRounded}){' '}
           <OffshorePumpInlineText plural={Math.ceil(offshorePumpCount) > 1} /> (
-          {props.offshorePumpProps.pumpingSpeed} <WaterInlineText />
+          {offshorePumpProps.pumpingSpeed} <WaterInlineText />
           /s per <OffshorePumpInlineText />
           ).
         </p>
@@ -173,8 +167,8 @@ export const Calculator = (props: CalculatorProps) => {
           {steamTurbineCountRounded}){' '}
           <SteamTurbineInlineText plural={Math.ceil(steamTurbineCount) > 1} />,
           producing {electricityOutputRounded} MW electricity (
-          {props.steamTurbineProps.fluidConsumption} <SteamInlineText />
-          /s to {props.steamTurbineProps.powerOutput} MW electricity per{' '}
+          {steamTurbineProps.fluidConsumption} <SteamInlineText />
+          /s to {steamTurbineProps.powerOutput} MW electricity per{' '}
           <SteamTurbineInlineText />
           ).
         </p>

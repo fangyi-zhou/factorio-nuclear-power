@@ -10,13 +10,13 @@ import {
   defaultLayout,
   getNeighbourCount,
 } from './ReactorLayout';
+import { EntityConfigContext } from './Contexts';
 
 type LayoutProps = {
   layout: ReactorLayout;
-  setLayout: React.Dispatch<React.SetStateAction<ReactorLayout>>;
+  setLayout: React.Dispatch<ReactorLayout>;
   isAutoFillEnabled: boolean;
   toggleAutoFill: () => void;
-  neighbouringBonus: number;
 };
 
 export const Layout = ({
@@ -24,32 +24,34 @@ export const Layout = ({
   setLayout,
   isAutoFillEnabled,
   toggleAutoFill,
-  neighbouringBonus,
 }: LayoutProps) => {
+  const entityConfig = React.useContext(EntityConfigContext);
+  const neighbouringBonus = entityConfig.nuclearReactorProps.neighbouringBonus;
+
   const addRow = React.useCallback(() => {
     const maxCol = layout[0].length;
     let emptyLine = Array(maxCol);
     emptyLine.fill(isAutoFillEnabled);
     setLayout([...layout, emptyLine]);
-  }, [layout, isAutoFillEnabled]);
+  }, [layout, setLayout, isAutoFillEnabled]);
 
   const removeRow = React.useCallback(() => {
     if (layout.length === 1) return;
     setLayout(layout.slice(0, layout.length - 1));
-  }, [layout]);
+  }, [layout, setLayout]);
 
   const addCol = React.useCallback(() => {
     setLayout(layout.map((row) => [...row, isAutoFillEnabled]));
-  }, [layout, isAutoFillEnabled]);
+  }, [layout, setLayout, isAutoFillEnabled]);
 
   const removeCol = React.useCallback(() => {
     if (layout[0].length === 1) return;
     setLayout(layout.map((row) => row.slice(0, row.length - 1)));
-  }, [layout]);
+  }, [layout, setLayout]);
 
   const reset = React.useCallback(() => {
-    setLayout(defaultLayout);
-  }, []);
+    setLayout(defaultLayout());
+  }, [setLayout]);
 
   const toggleCell = React.useCallback(
     (rowIdxToChange: number, cellIdxToChange: number) => {
@@ -67,7 +69,7 @@ export const Layout = ({
         )
       );
     },
-    [layout]
+    [layout, setLayout]
   );
 
   const renderCell = (rowIdx: number, cellIdx: number) => {
