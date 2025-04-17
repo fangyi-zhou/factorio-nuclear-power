@@ -1,6 +1,7 @@
 import { Container, Popup, Table } from 'semantic-ui-react';
 import React from 'react';
 import { EntityConfigContext, TextDisplayConfigContext } from './Contexts';
+import { nuclearFuelCellEnergyValue } from './Constants';
 
 type CalculatorProps = {
   sre: number;
@@ -125,8 +126,12 @@ export const Calculator = (props: CalculatorProps) => {
   const electricityOutputRounded = Math.round(electricityOutput * 100) / 100;
 
   // Reactor fuel usage
-  const fuelUsage = 1 / (8000 / (props.nuclearReactorCount * nuclearReactorProps.heatOutput) / 60);
-  const fuelUsageRounded = Math.round(fuelUsage * 100) / 100;
+  const fuelUsagePerMin =
+    1 /
+    (nuclearFuelCellEnergyValue /
+      (props.nuclearReactorCount * nuclearReactorProps.heatOutput) /
+      60);
+  const fuelUsageRoundedPerMin = Math.round(fuelUsagePerMin * 100) / 100;
 
   return (
     <div
@@ -146,9 +151,15 @@ export const Calculator = (props: CalculatorProps) => {
           ).
         </p>
         <p>
-          {props.nuclearReactorCount} <NuclearReactorInlineText plural={props.nuclearReactorCount > 1}/>{' '}
-          use <b>{fuelUsageRounded}</b> <FuelCellInlineText plural={fuelUsageRounded > 1}/>{' '}
-          ({Math.round(fuelUsageRounded / props.nuclearReactorCount * 100) / 100} <FuelCellInlineText /> per <NuclearReactorInlineText />).
+          {props.nuclearReactorCount}{' '}
+          <NuclearReactorInlineText plural={props.nuclearReactorCount > 1} />{' '}
+          use <b>{fuelUsageRoundedPerMin}</b>{' '}
+          <FuelCellInlineText plural={fuelUsageRoundedPerMin > 1} /> (
+          {Math.round(
+            (fuelUsageRoundedPerMin / props.nuclearReactorCount) * 100
+          ) / 100}{' '}
+          <FuelCellInlineText /> per <NuclearReactorInlineText />
+          ).
         </p>
         <p>
           {heatOutput} MW of heat output is consumed by{' '}
@@ -235,7 +246,7 @@ export const Calculator = (props: CalculatorProps) => {
               <Table.Cell>{Math.ceil(offshorePumpCount)}</Table.Cell>
               <Table.Cell>{Math.ceil(heatExchangerCount)}</Table.Cell>
               <Table.Cell>{Math.ceil(steamTurbineCount)}</Table.Cell>
-              <Table.Cell>{fuelUsageRounded}/min</Table.Cell>
+              <Table.Cell>{fuelUsageRoundedPerMin}/min</Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>

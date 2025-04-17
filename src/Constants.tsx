@@ -185,3 +185,5 @@ export const getSteamTurbineProps = (quality: Quality) => {
       return legendarySteamTurbine;
   }
 };
+
+export const nuclearFuelCellEnergyValue = 8000; // This is not subject to quality
