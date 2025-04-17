@@ -82,6 +82,14 @@ const SteamTurbineInlineText = ({ plural }: InlineTextDisplayProps) => (
   />
 );
 
+const FuelCellInlineText = ({ plural }: InlineTextDisplayProps) => (
+  <InlineText
+    text={'Fuel Cell' + (plural ? 's' : '')}
+    altText="Fuel Cell"
+    src="https://wiki.factorio.com/images/Uranium_fuel_cell.png"
+  />
+);
+
 export const Calculator = (props: CalculatorProps) => {
   const entityConfig = React.useContext(EntityConfigContext);
   const {
@@ -116,6 +124,10 @@ export const Calculator = (props: CalculatorProps) => {
   const electricityOutput = steamTurbineCount * steamTurbineProps.powerOutput;
   const electricityOutputRounded = Math.round(electricityOutput * 100) / 100;
 
+  // Reactor fuel usage
+  const fuelUsage = 1 / (8000 / (props.nuclearReactorCount * nuclearReactorProps.heatOutput) / 60);
+  const fuelUsageRounded = Math.round(fuelUsage * 100) / 100;
+
   return (
     <div
       style={{
@@ -132,6 +144,11 @@ export const Calculator = (props: CalculatorProps) => {
           {', '}
           {nuclearReactorProps.heatOutput} MW per <NuclearReactorInlineText />
           ).
+        </p>
+        <p>
+          {props.nuclearReactorCount} <NuclearReactorInlineText plural={props.nuclearReactorCount > 1}/>{' '}
+          use <b>{fuelUsageRounded}</b> <FuelCellInlineText plural={fuelUsageRounded > 1}/>{' '}
+          ({Math.round(fuelUsageRounded / props.nuclearReactorCount * 100) / 100} <FuelCellInlineText /> per <NuclearReactorInlineText />).
         </p>
         <p>
           {heatOutput} MW of heat output is consumed by{' '}
@@ -203,6 +220,13 @@ export const Calculator = (props: CalculatorProps) => {
                   src="https://wiki.factorio.com/images/Steam_turbine.png"
                 />
               </Table.HeaderCell>
+              <Table.HeaderCell>
+                <img
+                  alt="Uranium Fuel Cell"
+                  height="40px"
+                  src="https://wiki.factorio.com/images/Uranium_fuel_cell.png"
+                />
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -211,6 +235,7 @@ export const Calculator = (props: CalculatorProps) => {
               <Table.Cell>{Math.ceil(offshorePumpCount)}</Table.Cell>
               <Table.Cell>{Math.ceil(heatExchangerCount)}</Table.Cell>
               <Table.Cell>{Math.ceil(steamTurbineCount)}</Table.Cell>
+              <Table.Cell>{fuelUsageRounded}/min</Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
