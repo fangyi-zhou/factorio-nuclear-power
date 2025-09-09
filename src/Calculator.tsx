@@ -139,11 +139,14 @@ export const Calculator = (props: CalculatorProps) => {
         height: '100%',
       }}
     >
-      <Container fluid text
+      <Container
+        fluid
+        text
         style={{
           top: '25px',
           position: 'sticky',
-        }}>
+        }}
+      >
         <p>
           This layout produces {heatOutput} MW heat output ({props.sre}{' '}
           <Popup content="Single Reactor Equivalent" trigger={<i>SRE</i>} />

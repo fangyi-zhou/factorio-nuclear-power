@@ -1,82 +1,71 @@
-:root
-{
-    --background: light-dark(#ffffff, #2c2c2c);
-    --color: light-dark(#000000, #efefef);
-    --border: light-dark(#d4d4d5, var(--color));
-    --button: light-dark(#e0e1e2, #676767);
-    --buton-hover: light-dark(#cacbcd, #989898);
-    --background-header: light-dark(#f9fafb, #454545);
-    color-scheme: dark;
+:root {
+  --background: light-dark(#ffffff, #2c2c2c);
+  --color: light-dark(#000000, #efefef);
+  --border: light-dark(#d4d4d5, var(--color));
+  --button: light-dark(#e0e1e2, #676767);
+  --buton-hover: light-dark(#cacbcd, #989898);
+  --background-header: light-dark(#f9fafb, #454545);
+  color-scheme: dark;
 }
 
-:root.light-theme
-{
-    color-scheme: light;
+:root.light-theme {
+  color-scheme: light;
 }
 
-body
-{
-    background-color: var(--background);
-    color: var(--color);
+body {
+  background-color: var(--background);
+  color: var(--color);
 }
 
-.ui.header
-{
-    color: var(--color);
+.ui.header {
+  color: var(--color);
 }
 
-.ui.button
-{
-    background-color: var(--button);
-    color: var(--color);
+.ui.button {
+  background-color: var(--button);
+  color: var(--color);
 }
 
-.ui.button:hover, .ui.button:focus
-{
-    background-color: var(--buton-hover);
-    color: var(--color);
+.ui.button:hover,
+.ui.button:focus {
+  background-color: var(--buton-hover);
+  color: var(--color);
 }
 
-.ui.segment
-{
-    background-color: var(--background);
-    color: var(--color);
+.ui.segment {
+  background-color: var(--background);
+  color: var(--color);
 }
 
-.popup
-{
-    color: var(--color) !important;
-    background-color: var(--background) !important;
-    border: 1px solid var(--border) !important;
+.popup {
+  color: var(--color) !important;
+  background-color: var(--background) !important;
+  border: 1px solid var(--border) !important;
 }
 
 .ui.table > thead > tr > th,
 .ui.table thead th,
-.ui.table
-{
-    background-color: var(--background-header);
-    color: var(--color);
-    border: 1px solid var(--border) !important;
-    border-collapse: collapse;
+.ui.table {
+  background-color: var(--background-header);
+  color: var(--color);
+  border: 1px solid var(--border) !important;
+  border-collapse: collapse;
 }
 
-td
-{
-    background-color: var(--background);
-    color: var(--color);
-    border: 1px solid var(--border);
+td {
+  background-color: var(--background);
+  color: var(--color);
+  border: 1px solid var(--border);
 }
 
-.ui.toggle.checkbox input:focus:checked~label,
-.ui.toggle.checkbox input:checked~label,
-.ui.toggle.checkbox label
-{
-    color: var(--color) !important;
+.ui.toggle.checkbox input:focus:checked ~ label,
+.ui.toggle.checkbox input:checked ~ label,
+.ui.toggle.checkbox label {
+  color: var(--color) !important;
 }
 
 .ui.checkbox label,
 .ui.checkbox label:hover,
-.ui.checkbox label:focus
-{
-    color: var(--color) !important;
+.ui.checkbox label:focus {
+  color: var(--color) !important;
 }

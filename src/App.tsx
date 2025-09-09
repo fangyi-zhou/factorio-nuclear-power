@@ -83,7 +83,8 @@ export const App = () => {
   const { entityConfig, textDisplayConfig, layout } = state;
 
   const [isAutoFillEnabled, setIsAutoFillEnabled] = React.useState(false);
-  const [isCustomisationEnabled, setIsCustomisationEnabled] = React.useState(false);
+  const [isCustomisationEnabled, setIsCustomisationEnabled] =
+    React.useState(false);
   const [isDarkThemeEnabled, setDarkThemeEnabled] = React.useState(true);
 
   const neighbouringBonus = entityConfig.nuclearReactorProps.neighbouringBonus;
@@ -158,7 +159,9 @@ export const App = () => {
                   checked={isDarkThemeEnabled}
                   onChange={() => {
                     setDarkThemeEnabled(!isDarkThemeEnabled);
-                    document.querySelector(":root")?.classList.toggle("light-theme");
+                    document
+                      .querySelector(':root')
+                      ?.classList.toggle('light-theme');
                   }}
                 />
               </GridRow>

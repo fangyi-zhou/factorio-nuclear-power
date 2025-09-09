@@ -92,7 +92,8 @@ export const Layout = ({
               <FontAwesomeIcon icon={faCircleRadiation} size="2xl" />
               <br />
               {count === 4 && (
-                <Popup className={"popup"}
+                <Popup
+                  className={'popup'}
                   content="This reactor cannot be refueled automatically"
                   trigger={<FontAwesomeIcon icon={faWarning} />}
                 />
