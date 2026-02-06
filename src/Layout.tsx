@@ -116,7 +116,7 @@ export const Layout = ({
           <Button onClick={removeRow} disabled={layout.length === 1}>
             - Row
           </Button>
-          <Button onClick={addCol} disabled={maxCol >= 6}>
+          <Button onClick={addCol} disabled={maxCol >= 8}>
             + Column
           </Button>
           <Button onClick={removeCol} disabled={maxCol === 1}>
