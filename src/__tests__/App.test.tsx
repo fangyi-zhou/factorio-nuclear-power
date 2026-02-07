@@ -25,7 +25,9 @@ describe('App — integration', () => {
 
   it('default layout shows correct table values for 1 reactor', () => {
     render(<App />);
-    const table = screen.getByRole('table');
+    const table = screen.getByRole('table', {
+      name: 'Building counts summary',
+    });
     const rows = table.querySelectorAll('tbody tr');
     const dataRow = rows[rows.length - 1];
     const cells = dataRow.querySelectorAll('td');

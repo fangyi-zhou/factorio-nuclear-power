@@ -204,7 +204,7 @@ export const Calculator = (props: CalculatorProps) => {
           <SteamTurbineInlineText />
           ).
         </p>
-        <Table celled>
+        <Table celled aria-label="Building counts summary">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>

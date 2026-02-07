@@ -22,7 +22,7 @@ interface QualitySelectorProps {
 }
 const QualitySelector = ({ quality, setQuality }: QualitySelectorProps) => {
   return (
-    <div>
+    <div role="radiogroup" aria-label="Quality tier">
       <Radio
         label="Normal"
         checked={quality === Quality.Normal}
@@ -112,7 +112,7 @@ export const CustomisationPanel = ({
   }, [steamTurbineQuality, entityConfig, setEntityConfig]);
   return (
     <>
-      <Table structured>
+      <Table structured aria-label="Entity quality configuration">
         <TableHeader>
           <TableHeaderCell>Entity</TableHeaderCell>
           <TableHeaderCell>Quality</TableHeaderCell>

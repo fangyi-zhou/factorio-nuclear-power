@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Layout } from '../Layout';
 import { renderWithProviders } from './test-utils';
@@ -30,40 +30,52 @@ function renderLayout(
 }
 
 describe('Layout — button states', () => {
+  function toolbar() {
+    return within(screen.getByRole('toolbar', { name: 'Layout controls' }));
+  }
+
   it('disables - Row when there is only 1 row', () => {
     renderLayout({ layout: [[true, false, false]] });
-    expect(screen.getByRole('button', { name: '- Row' })).toBeDisabled();
+    expect(toolbar().getByRole('button', { name: '- Row' })).toBeDisabled();
   });
 
   it('enables - Row when there are multiple rows', () => {
     renderLayout({ layout: [[true], [false]] });
-    expect(screen.getByRole('button', { name: '- Row' })).not.toBeDisabled();
+    expect(toolbar().getByRole('button', { name: '- Row' })).not.toBeDisabled();
   });
 
   it('disables - Column when there is only 1 column', () => {
     renderLayout({ layout: [[true], [false], [false]] });
-    expect(screen.getByRole('button', { name: '- Column' })).toBeDisabled();
+    expect(toolbar().getByRole('button', { name: '- Column' })).toBeDisabled();
   });
 
   it('enables - Column when there are multiple columns', () => {
     renderLayout({ layout: [[true, false]] });
-    expect(screen.getByRole('button', { name: '- Column' })).not.toBeDisabled();
+    expect(
+      toolbar().getByRole('button', { name: '- Column' })
+    ).not.toBeDisabled();
   });
 
   it('disables + Column at 8 columns', () => {
     const row = Array(8).fill(false);
     renderLayout({ layout: [row] });
-    expect(screen.getByRole('button', { name: '+ Column' })).toBeDisabled();
+    expect(toolbar().getByRole('button', { name: '+ Column' })).toBeDisabled();
   });
 
   it('enables + Column when under 8 columns', () => {
     const row = Array(7).fill(false);
     renderLayout({ layout: [row] });
-    expect(screen.getByRole('button', { name: '+ Column' })).not.toBeDisabled();
+    expect(
+      toolbar().getByRole('button', { name: '+ Column' })
+    ).not.toBeDisabled();
   });
 });
 
 describe('Layout — cell rendering', () => {
+  function grid() {
+    return within(screen.getByRole('grid', { name: 'Reactor grid layout' }));
+  }
+
   it('renders cells with correct aria labels', () => {
     renderLayout({
       layout: [
@@ -72,17 +84,18 @@ describe('Layout — cell rendering', () => {
       ],
     });
 
+    const g = grid();
     expect(
-      screen.getByRole('button', { name: 'Cell 0, 0 (Occupied)' })
+      g.getByRole('button', { name: 'Cell 0, 0 (Occupied)' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Cell 0, 1 (Unoccupied)' })
+      g.getByRole('button', { name: 'Cell 0, 1 (Unoccupied)' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Cell 1, 0 (Unoccupied)' })
+      g.getByRole('button', { name: 'Cell 1, 0 (Unoccupied)' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Cell 1, 1 (Occupied)' })
+      g.getByRole('button', { name: 'Cell 1, 1 (Occupied)' })
     ).toBeInTheDocument();
   });
 
@@ -92,18 +105,26 @@ describe('Layout — cell rendering', () => {
     });
 
     // Each has 1 neighbour, so sre = 1 + 1*1 = 2x
-    expect(screen.getAllByText('2x')).toHaveLength(2);
+    expect(grid().getAllByText('2x')).toHaveLength(2);
   });
 });
 
 describe('Layout — interactions', () => {
+  function toolbar() {
+    return within(screen.getByRole('toolbar', { name: 'Layout controls' }));
+  }
+
+  function grid() {
+    return within(screen.getByRole('grid', { name: 'Reactor grid layout' }));
+  }
+
   it('+ Row calls setLayout with an added row', async () => {
     const user = userEvent.setup();
     const { setLayout } = renderLayout({
       layout: [[true, false]],
     });
 
-    await user.click(screen.getByRole('button', { name: '+ Row' }));
+    await user.click(toolbar().getByRole('button', { name: '+ Row' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, false],
       [false, false],
@@ -117,7 +138,7 @@ describe('Layout — interactions', () => {
       isAutoFillEnabled: true,
     });
 
-    await user.click(screen.getByRole('button', { name: '+ Row' }));
+    await user.click(toolbar().getByRole('button', { name: '+ Row' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, false],
       [true, true],
@@ -133,7 +154,7 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByRole('button', { name: '- Row' }));
+    await user.click(toolbar().getByRole('button', { name: '- Row' }));
     expect(setLayout).toHaveBeenCalledWith([[true, false]]);
   });
 
@@ -143,7 +164,7 @@ describe('Layout — interactions', () => {
       layout: [[true], [false]],
     });
 
-    await user.click(screen.getByRole('button', { name: '+ Column' }));
+    await user.click(toolbar().getByRole('button', { name: '+ Column' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, false],
       [false, false],
@@ -157,7 +178,7 @@ describe('Layout — interactions', () => {
       isAutoFillEnabled: true,
     });
 
-    await user.click(screen.getByRole('button', { name: '+ Column' }));
+    await user.click(toolbar().getByRole('button', { name: '+ Column' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, true],
       [false, true],
@@ -173,7 +194,7 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByRole('button', { name: '- Column' }));
+    await user.click(toolbar().getByRole('button', { name: '- Column' }));
     expect(setLayout).toHaveBeenCalledWith([[true], [false]]);
   });
 
@@ -188,7 +209,7 @@ describe('Layout — interactions', () => {
 
     // Click on occupied cell (0,0) to unoccupy it
     await user.click(
-      screen.getByRole('button', { name: 'Cell 0, 0 (Occupied)' })
+      grid().getByRole('button', { name: 'Cell 0, 0 (Occupied)' })
     );
     expect(setLayout).toHaveBeenCalledWith([
       [false, false],
@@ -206,7 +227,7 @@ describe('Layout — interactions', () => {
     });
 
     await user.click(
-      screen.getByRole('button', { name: 'Cell 0, 1 (Unoccupied)' })
+      grid().getByRole('button', { name: 'Cell 0, 1 (Unoccupied)' })
     );
     expect(setLayout).toHaveBeenCalledWith([
       [true, true],
@@ -223,7 +244,7 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByRole('button', { name: 'Reset' }));
+    await user.click(toolbar().getByRole('button', { name: 'Reset' }));
     expect(setLayout).toHaveBeenCalledWith(defaultLayout());
   });
 
@@ -231,7 +252,9 @@ describe('Layout — interactions', () => {
     const user = userEvent.setup();
     const { toggleAutoFill } = renderLayout();
 
-    await user.click(screen.getByRole('button', { name: 'Enable Auto Fill' }));
+    await user.click(
+      toolbar().getByRole('button', { name: 'Enable Auto Fill' })
+    );
     expect(toggleAutoFill).toHaveBeenCalledTimes(1);
   });
 });
