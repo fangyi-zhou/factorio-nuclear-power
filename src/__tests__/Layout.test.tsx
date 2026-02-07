@@ -47,9 +47,7 @@ describe('Layout — button states', () => {
 
   it('enables - Column when there are multiple columns', () => {
     renderLayout({ layout: [[true, false]] });
-    expect(
-      screen.getByRole('button', { name: '- Column' })
-    ).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: '- Column' })).not.toBeDisabled();
   });
 
   it('disables + Column at 8 columns', () => {
@@ -61,9 +59,7 @@ describe('Layout — button states', () => {
   it('enables + Column when under 8 columns', () => {
     const row = Array(7).fill(false);
     renderLayout({ layout: [row] });
-    expect(
-      screen.getByRole('button', { name: '+ Column' })
-    ).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: '+ Column' })).not.toBeDisabled();
   });
 });
 
@@ -235,9 +231,7 @@ describe('Layout — interactions', () => {
     const user = userEvent.setup();
     const { toggleAutoFill } = renderLayout();
 
-    await user.click(
-      screen.getByRole('button', { name: 'Enable Auto Fill' })
-    );
+    await user.click(screen.getByRole('button', { name: 'Enable Auto Fill' }));
     expect(toggleAutoFill).toHaveBeenCalledTimes(1);
   });
 });

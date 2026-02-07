@@ -1,4 +1,8 @@
-import { defaultLayout, getNeighbourCount, ReactorLayout } from '../ReactorLayout';
+import {
+  defaultLayout,
+  getNeighbourCount,
+  ReactorLayout,
+} from '../ReactorLayout';
 
 describe('defaultLayout', () => {
   it('returns a 3x3 grid', () => {
