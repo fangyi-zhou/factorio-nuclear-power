@@ -5,7 +5,9 @@ describe('App — integration', () => {
   it('renders the title', () => {
     render(<App />);
     expect(
-      screen.getByText('Factorio Nuclear Power Plant Calculator')
+      screen.getByRole('heading', {
+        name: 'Factorio Nuclear Power Plant Calculator',
+      })
     ).toBeInTheDocument();
   });
 
@@ -23,7 +25,8 @@ describe('App — integration', () => {
 
   it('default layout shows correct table values for 1 reactor', () => {
     render(<App />);
-    const rows = screen.getAllByRole('row');
+    const table = screen.getByRole('table');
+    const rows = table.querySelectorAll('tbody tr');
     const dataRow = rows[rows.length - 1];
     const cells = dataRow.querySelectorAll('td');
 
@@ -33,6 +36,8 @@ describe('App — integration', () => {
     expect(cells[3].textContent).toBe('7'); // steam turbines
   });
 
+  // Semantic UI Checkbox renders custom elements without standard ARIA roles,
+  // so we fall back to getByText for these toggles.
   it('renders Dark Theme toggle', () => {
     render(<App />);
     expect(screen.getByText('Dark Theme')).toBeInTheDocument();

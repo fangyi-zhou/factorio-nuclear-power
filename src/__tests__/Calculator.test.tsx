@@ -12,10 +12,8 @@ import {
 } from '../Constants';
 
 function getTableCells() {
-  // The table has header row with images, then a body row with values.
-  // Get all td cells in the table body.
-  const rows = screen.getAllByRole('row');
-  // Last row is the data row
+  const table = screen.getByRole('table');
+  const rows = table.querySelectorAll('tbody tr');
   const dataRow = rows[rows.length - 1];
   const cells = dataRow.querySelectorAll('td');
   return {

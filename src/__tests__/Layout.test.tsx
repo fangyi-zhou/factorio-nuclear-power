@@ -32,34 +32,38 @@ function renderLayout(
 describe('Layout — button states', () => {
   it('disables - Row when there is only 1 row', () => {
     renderLayout({ layout: [[true, false, false]] });
-    expect(screen.getByText('- Row')).toBeDisabled();
+    expect(screen.getByRole('button', { name: '- Row' })).toBeDisabled();
   });
 
   it('enables - Row when there are multiple rows', () => {
     renderLayout({ layout: [[true], [false]] });
-    expect(screen.getByText('- Row')).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: '- Row' })).not.toBeDisabled();
   });
 
   it('disables - Column when there is only 1 column', () => {
     renderLayout({ layout: [[true], [false], [false]] });
-    expect(screen.getByText('- Column')).toBeDisabled();
+    expect(screen.getByRole('button', { name: '- Column' })).toBeDisabled();
   });
 
   it('enables - Column when there are multiple columns', () => {
     renderLayout({ layout: [[true, false]] });
-    expect(screen.getByText('- Column')).not.toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: '- Column' })
+    ).not.toBeDisabled();
   });
 
   it('disables + Column at 8 columns', () => {
     const row = Array(8).fill(false);
     renderLayout({ layout: [row] });
-    expect(screen.getByText('+ Column')).toBeDisabled();
+    expect(screen.getByRole('button', { name: '+ Column' })).toBeDisabled();
   });
 
   it('enables + Column when under 8 columns', () => {
     const row = Array(7).fill(false);
     renderLayout({ layout: [row] });
-    expect(screen.getByText('+ Column')).not.toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: '+ Column' })
+    ).not.toBeDisabled();
   });
 });
 
@@ -73,16 +77,16 @@ describe('Layout — cell rendering', () => {
     });
 
     expect(
-      screen.getByLabelText('Cell 0, 0 (Occupied)')
+      screen.getByRole('button', { name: 'Cell 0, 0 (Occupied)' })
     ).toBeInTheDocument();
     expect(
-      screen.getByLabelText('Cell 0, 1 (Unoccupied)')
+      screen.getByRole('button', { name: 'Cell 0, 1 (Unoccupied)' })
     ).toBeInTheDocument();
     expect(
-      screen.getByLabelText('Cell 1, 0 (Unoccupied)')
+      screen.getByRole('button', { name: 'Cell 1, 0 (Unoccupied)' })
     ).toBeInTheDocument();
     expect(
-      screen.getByLabelText('Cell 1, 1 (Occupied)')
+      screen.getByRole('button', { name: 'Cell 1, 1 (Occupied)' })
     ).toBeInTheDocument();
   });
 
@@ -103,7 +107,7 @@ describe('Layout — interactions', () => {
       layout: [[true, false]],
     });
 
-    await user.click(screen.getByText('+ Row'));
+    await user.click(screen.getByRole('button', { name: '+ Row' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, false],
       [false, false],
@@ -117,7 +121,7 @@ describe('Layout — interactions', () => {
       isAutoFillEnabled: true,
     });
 
-    await user.click(screen.getByText('+ Row'));
+    await user.click(screen.getByRole('button', { name: '+ Row' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, false],
       [true, true],
@@ -133,7 +137,7 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByText('- Row'));
+    await user.click(screen.getByRole('button', { name: '- Row' }));
     expect(setLayout).toHaveBeenCalledWith([[true, false]]);
   });
 
@@ -143,7 +147,7 @@ describe('Layout — interactions', () => {
       layout: [[true], [false]],
     });
 
-    await user.click(screen.getByText('+ Column'));
+    await user.click(screen.getByRole('button', { name: '+ Column' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, false],
       [false, false],
@@ -157,7 +161,7 @@ describe('Layout — interactions', () => {
       isAutoFillEnabled: true,
     });
 
-    await user.click(screen.getByText('+ Column'));
+    await user.click(screen.getByRole('button', { name: '+ Column' }));
     expect(setLayout).toHaveBeenCalledWith([
       [true, true],
       [false, true],
@@ -173,7 +177,7 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByText('- Column'));
+    await user.click(screen.getByRole('button', { name: '- Column' }));
     expect(setLayout).toHaveBeenCalledWith([[true], [false]]);
   });
 
@@ -187,7 +191,9 @@ describe('Layout — interactions', () => {
     });
 
     // Click on occupied cell (0,0) to unoccupy it
-    await user.click(screen.getByLabelText('Cell 0, 0 (Occupied)'));
+    await user.click(
+      screen.getByRole('button', { name: 'Cell 0, 0 (Occupied)' })
+    );
     expect(setLayout).toHaveBeenCalledWith([
       [false, false],
       [false, true],
@@ -203,7 +209,9 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByLabelText('Cell 0, 1 (Unoccupied)'));
+    await user.click(
+      screen.getByRole('button', { name: 'Cell 0, 1 (Unoccupied)' })
+    );
     expect(setLayout).toHaveBeenCalledWith([
       [true, true],
       [false, true],
@@ -219,7 +227,7 @@ describe('Layout — interactions', () => {
       ],
     });
 
-    await user.click(screen.getByText('Reset'));
+    await user.click(screen.getByRole('button', { name: 'Reset' }));
     expect(setLayout).toHaveBeenCalledWith(defaultLayout());
   });
 
@@ -227,7 +235,9 @@ describe('Layout — interactions', () => {
     const user = userEvent.setup();
     const { toggleAutoFill } = renderLayout();
 
-    await user.click(screen.getByText('Enable Auto Fill'));
+    await user.click(
+      screen.getByRole('button', { name: 'Enable Auto Fill' })
+    );
     expect(toggleAutoFill).toHaveBeenCalledTimes(1);
   });
 });
