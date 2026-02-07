@@ -30,7 +30,7 @@ export const Layout = ({
 
   const addRow = React.useCallback(() => {
     const maxCol = layout[0].length;
-    let emptyLine = Array(maxCol);
+    const emptyLine = Array(maxCol);
     emptyLine.fill(isAutoFillEnabled);
     setLayout([...layout, emptyLine]);
   }, [layout, setLayout, isAutoFillEnabled]);

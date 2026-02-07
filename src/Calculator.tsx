@@ -51,7 +51,7 @@ const HeatExchangerInlineText = ({ plural }: InlineTextDisplayProps) => (
   />
 );
 
-const WaterInlineText = (props: InlineTextDisplayProps) => (
+const WaterInlineText = (_props: InlineTextDisplayProps) => (
   <InlineText
     text="Water"
     altText="Water"
@@ -59,7 +59,7 @@ const WaterInlineText = (props: InlineTextDisplayProps) => (
   />
 );
 
-const SteamInlineText = (props: InlineTextDisplayProps) => (
+const SteamInlineText = (_props: InlineTextDisplayProps) => (
   <InlineText
     text="Steam"
     altText="Steam"

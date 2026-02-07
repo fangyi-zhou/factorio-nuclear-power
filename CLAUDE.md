@@ -8,15 +8,15 @@ Factorio Nuclear Power Plant Calculator — a React/TypeScript single-page app t
 
 ## Commands
 
-- **Dev server:** `yarn start`
-- **Build:** `yarn build`
-- **Test:** `yarn test` (Jest via react-scripts, watch mode by default; `yarn test --watchAll=false` for CI)
+- **Dev server:** `yarn start` (Vite)
+- **Build:** `yarn build` (outputs to `dist/`)
+- **Preview:** `yarn preview` (serve production build locally)
 - **Lint:** `yarn lint` (ESLint on src/)
 - **Format:** `yarn format` (Prettier on src/)
 
 ## Architecture
 
-Built with Create React App (react-scripts). UI uses Semantic UI React + FontAwesome icons. No external state management library — uses `useReducer` + React Context API.
+Built with Vite + React. UI uses Semantic UI React + FontAwesome icons. No external state management library — uses `useReducer` + React Context API.
 
 ### Key files
 
@@ -37,4 +37,4 @@ User interaction → App reducer dispatches (`'layout'`, `'entity_config'`, `'to
 
 - TypeScript strict mode
 - Prettier: semicolons, single quotes, 2-space indent
-- ESLint: extends `react-app` and `react-app/jest`
+- ESLint: flat config with typescript-eslint, react-hooks, react-refresh
