@@ -13,6 +13,8 @@ Factorio Nuclear Power Plant Calculator — a React/TypeScript single-page app t
 - **Preview:** `yarn preview` (serve production build locally)
 - **Lint:** `yarn lint` (ESLint on src/)
 - **Format:** `yarn format` (Prettier on src/)
+- **Test:** `yarn test` (Vitest, single run)
+- **Test watch:** `yarn test:watch` (Vitest, watch mode)
 
 ## Architecture
 
