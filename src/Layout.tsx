@@ -83,6 +83,7 @@ export const Layout = ({
           }}
           style={{ textAlign: 'center', height: '100%' }}
           role="button"
+          tabIndex={0}
           aria-label={`Cell ${rowIdx}, ${cellIdx} (${
             layout[rowIdx][cellIdx] ? 'Occupied' : 'Unoccupied'
           })`}
@@ -95,7 +96,12 @@ export const Layout = ({
                 <Popup
                   className={'popup'}
                   content="This reactor cannot be refueled automatically"
-                  trigger={<FontAwesomeIcon icon={faWarning} />}
+                  trigger={
+                    <FontAwesomeIcon
+                      icon={faWarning}
+                      title="Warning: cannot be refueled automatically"
+                    />
+                  }
                 />
               )}
               {sre + 'x'}
@@ -108,9 +114,19 @@ export const Layout = ({
 
   const maxCol = layout[0].length;
   return (
-    <Grid celled relaxed columns={'equal'}>
+    <Grid
+      celled
+      relaxed
+      columns={'equal'}
+      role="grid"
+      aria-label="Reactor grid layout"
+    >
       <Grid.Row centered>
-        <div style={{ padding: '10px' }} role="toolbar">
+        <div
+          style={{ padding: '10px' }}
+          role="toolbar"
+          aria-label="Layout controls"
+        >
           <p>Click on an empty cell to place a nuclear power plant.</p>
           <Button onClick={addRow}>+ Row</Button>
           <Button onClick={removeRow} disabled={layout.length === 1}>
