@@ -143,3 +143,72 @@ describe('Calculator — fuel consumption', () => {
     expect(cells.fuelUsage).toBe('0.6/min');
   });
 });
+
+describe('Calculator — average output per reactor (issue #74)', () => {
+  it.each([
+    {
+      label: '1 reactor',
+      sre: 1,
+      reactors: 1,
+      avgSre: 1,
+      avgHeat: 40,
+      avgElectricity: 39.96,
+    },
+    {
+      label: '2x2',
+      sre: 12,
+      reactors: 4,
+      avgSre: 3,
+      avgHeat: 120,
+      avgElectricity: 119.89,
+    },
+    {
+      label: '2x3',
+      sre: 20,
+      reactors: 6,
+      avgSre: 3.33,
+      avgHeat: 133.33,
+      avgElectricity: 133.21,
+    },
+    {
+      label: '4x2',
+      sre: 28,
+      reactors: 8,
+      avgSre: 3.5,
+      avgHeat: 140,
+      avgElectricity: 139.87,
+    },
+    {
+      label: '3x3',
+      sre: 33,
+      reactors: 9,
+      avgSre: 3.67,
+      avgHeat: 146.67,
+      avgElectricity: 146.53,
+    },
+  ])(
+    '$label: average $avgSre SRE per reactor',
+    ({ sre, reactors, avgSre, avgHeat, avgElectricity }) => {
+      renderWithProviders(
+        <Calculator sre={sre} nuclearReactorCount={reactors} />
+      );
+
+      expect(
+        screen.getByText((_content, element) => {
+          return (
+            element?.tagName === 'P' &&
+            !!element.textContent?.includes(
+              `contributes ${avgSre} SRE (${avgHeat} MW heat, ${avgElectricity} MW electricity)`
+            )
+          );
+        })
+      ).toBeInTheDocument();
+    }
+  );
+
+  it('does not show average output when there are no reactors', () => {
+    renderWithProviders(<Calculator sre={0} nuclearReactorCount={0} />);
+
+    expect(screen.queryByText(/contributes.*SRE/)).not.toBeInTheDocument();
+  });
+});

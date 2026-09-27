@@ -133,6 +133,22 @@ export const Calculator = (props: CalculatorProps) => {
       60);
   const fuelUsageRoundedPerMin = Math.round(fuelUsagePerMin * 100) / 100;
 
+  // Average output per reactor (SRE / # reactors), see issue #74
+  const averageSrePerReactor =
+    props.nuclearReactorCount > 0 ? props.sre / props.nuclearReactorCount : 0;
+  const averageSrePerReactorRounded =
+    Math.round(averageSrePerReactor * 100) / 100;
+  const averageHeatPerReactor =
+    props.nuclearReactorCount > 0 ? heatOutput / props.nuclearReactorCount : 0;
+  const averageHeatPerReactorRounded =
+    Math.round(averageHeatPerReactor * 100) / 100;
+  const averageElectricityPerReactor =
+    props.nuclearReactorCount > 0
+      ? electricityOutput / props.nuclearReactorCount
+      : 0;
+  const averageElectricityPerReactorRounded =
+    Math.round(averageElectricityPerReactor * 100) / 100;
+
   return (
     <div
       style={{
@@ -154,6 +170,15 @@ export const Calculator = (props: CalculatorProps) => {
           {nuclearReactorProps.heatOutput} MW per <NuclearReactorInlineText />
           ).
         </p>
+        {props.nuclearReactorCount > 0 && (
+          <p>
+            On average, each <NuclearReactorInlineText /> contributes{' '}
+            <b>{averageSrePerReactorRounded}</b>{' '}
+            <Popup content="Single Reactor Equivalent" trigger={<i>SRE</i>} /> (
+            {averageHeatPerReactorRounded} MW heat,{' '}
+            {averageElectricityPerReactorRounded} MW electricity).
+          </p>
+        )}
         <p>
           {props.nuclearReactorCount}{' '}
           <NuclearReactorInlineText plural={props.nuclearReactorCount > 1} />{' '}
